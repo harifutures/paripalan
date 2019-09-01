@@ -76,4 +76,13 @@ class VillagesProvider with ChangeNotifier {
       roleId: 10
     ),
   ];
+
+  List<Village> get villageList {
+    return [..._villagesList];
+  }
+
+  Village fidnById(int villageId) {
+     //return _stateRastramList.firstWhere((st) => st.stateId == stateId);
+     return _villagesList.firstWhere((vg) => vg.villageId == villageId);
+  }
 }

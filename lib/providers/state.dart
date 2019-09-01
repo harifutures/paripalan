@@ -11,4 +11,7 @@ StateRastram ({
   this.roleId
 });
 
+bool operator ==(o) => o is StateRastram && o.stateName == stateName;
+int get hashCode => stateName.hashCode^stateId.hashCode;
+
 }

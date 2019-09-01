@@ -9,13 +9,20 @@ import '../providers/states_provider.dart';
 import '../providers/districts_provider.dart';
 import '../providers/mandals_provider.dart';
 import '../providers/villages_provider.dart';
+import '../providers/role_provider.dart';
 
-import '../models/state.dart';
+import '../providers/state.dart';
 import '../models/district.dart';
 import '../models/mandal.dart';
 import '../models/village.dart';
+import '../models/Role.dart';
+
+import '../widgets/districts_dropdown_widget.dart';
+import '../widgets/mandals_dropdown_widget.dart';
+import '../widgets/dropdowns_widget.dart';
 
 class Complaints extends StatefulWidget {
+  
   
   @override
   _ComplaintsState createState() => _ComplaintsState();
@@ -33,12 +40,6 @@ class _ComplaintsState extends State<Complaints> {
   final _form = GlobalKey<FormState>();
 
   var _isInit = true;
-
-  String _district = "District";
-  String _mandal = "Mandal";
-  String _village = "Village";
-  String _role = "role";
-  StateRastram _stateRastram;
 
   var _initValues = {
     'title': '',
@@ -97,72 +98,35 @@ void _showMessage() {
         .showSnackBar(new SnackBar(content: new Text("Submitting Form..")));
   }
 
+
   @override
   Widget build (BuildContext context) {
     /*final departmentsData = Provider.of<Departments>(context);
-    final departments = departmentsData.departmentList;*/
-    final stateRastarmList = Provider.of<StatesProvider>(context);
+    final departments = departmentsData.departmentList;
+    final stateRastarmList = Provider.of<StatesProvider>(context, listen: false);
     final statesRastram = stateRastarmList.stateRastramList;
+   // final districtList = Provider.of<DistrictsProvider>(context);
+    //final districts = districtList.districtList;
+    
+    final mandalList = Provider.of<MandalsProvider>(context, listen: false);
+    final mandals = mandalList.mandalList;
+    final villageList = Provider.of<VillagesProvider>(context, listen: false);
+    final villages = villageList.villageList;
+    final roleList = Provider.of<RoleProvider>(context, listen: false);
+    final roles = roleList.roleList;
+    StateRastram newTemp; */
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Complaints Form')
-      ),
+      // appBar: AppBar(
+      //   title: Text('Complaints Form')
+      // ),
 
-      body: Padding(
+      body: Padding (
         padding: const EdgeInsets.all(16.0),
         child: Form (
           child: ListView (
             children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Consumer<StateRastram> (
-                    builder: (ctx, stateRastram, _) => FormField(
-                      builder: (FormFieldState state) {
-                        return Container(
-                          // decoration: InputDecoration(
-                          //   icon: const Icon(Icons.color_lens),
-                          //   labelText: 'State',
-                          // ),
-                          child:  new DropdownButtonHideUnderline(
-                            child: DropdownButton<StateRastram> (
-                              hint: new Text("Select State"),
-                              items: statesRastram.map((StateRastram value) {
-                                 return new DropdownMenuItem(
-                                   value: value,
-                                   child: new Text(value.stateName),
-                                 );
-                               }).toList(),
-
-                              value: _stateRastram,
-                              isDense: true,
-                              onChanged: (StateRastram newValue) {
-                                _stateRastram = newValue;
-                                setState(() =>                                   //newContact.favoriteColor = newValue;
-                                  _stateRastram = newValue
-                                 // state.didChange(newValue);
-                                );
-                              }
-
-                            ),
-                          ),
-                        );
-                      }
-
-                    ),
-
-                  ),
-                  Container(
-                    width: 100,
-                    height: 100,
-                    margin: EdgeInsets.only(
-                      top: 8,
-                      right: 10,
-                    ),
-                    
-                  )
-                ]
-              ),
+              //Populate DropDowns.
+              RegionDropDowns(),
               TextFormField (
                 initialValue: _initValues['title'],
                 decoration: InputDecoration(
@@ -342,4 +306,60 @@ void _showMessage() {
     );
 
   }
+
+ /* Widget _districtsDropDown () {
+    print("inside district method");
+    //return _stateRastram != null ? FormField(
+                      //builder: (FormFieldState state) {
+                        return _stateRastram != null ? SingleChildScrollView(
+                          child: Container(
+                          // decoration: InputDecoration(
+                          //   icon: const Icon(Icons.color_lens),
+                          //   labelText: 'State',
+                          // ),
+                          // child : InputDecorator(
+                          //   isEmpty: _district == null,
+                             child:
+                            new DropdownButtonHideUnderline(
+                              
+                            child: DropdownButton<District> (
+                              hint: new Text("Select District"),
+                            //  items: districtList.findDistrictsByStateId(newTemp.stateId).map((District value) {
+                              
+                                items: districts.length != 0 ? districts.map((District value) {
+                                 return new DropdownMenuItem(
+                                   value: value,
+                                   child: new Text(value.districtName),
+                                 );
+                               }).toList() : [],
+                              
+                              
+
+                              value: _district,
+                              isDense: true,
+                              onChanged: (District newValue) {
+                                print("District dropdown, begin onchange..");
+                                _district = newValue;
+                                // setState(() =>                                   
+                                //   _district = newValue
+                                //  // state.didChange(newValue);
+                                // );
+                                setState(() => {                                   
+                                  _district = newValue,
+                                  print("District dropdown, setstate..")
+                                //  state.didChange(newValue)
+                                }
+                                );
+                                print("District dropdown, end onchange..");
+                              },
+
+                            ),
+                          ),
+                          ),
+                        ):Container();
+                      //}
+
+                    //);
+  }*/
+
 }

@@ -4,45 +4,55 @@ import '../models/role.dart';
 class RoleProvider with ChangeNotifier {
   List<Role> _rolesList = [
     Role(
-      roelId: 1,
+      roleId: 1,
       roleName: 'CM'
     ),
     Role(
-      roelId: 2,
+      roleId: 2,
       roleName: 'Home Minister'
     ),
     Role(
-      roelId: 3,
+      roleId: 3,
       roleName: 'Collector'
     ),
     Role(
-      roelId: 4,
+      roleId: 4,
       roleName: 'ZPTC'
     ),
     Role(
-      roelId: 5,
+      roleId: 5,
       roleName: 'Counciler'
     ),
     Role(
-      roelId: 6,
+      roleId: 6,
       roleName: 'Tasildar/MRO'
     ),
     Role(
-      roelId: 7,
+      roleId: 7,
       roleName: 'MPTC'
     ),
     Role(
-      roelId: 8,
+      roleId: 8,
       roleName: 'Sarpanch'
     ),
     Role(
-      roelId: 9,
+      roleId: 9,
       roleName: 'VRO'
     ),
     Role(
-      roelId: 10,
+      roleId: 10,
       roleName: 'Village Voulanteer'
     )
 
   ];
+
+  List<Role> get roleList {
+    return [..._rolesList];
+  }
+
+  Role fidnById(int roleId) {
+     //return _stateRastramList.firstWhere((st) => st.stateId == stateId);
+     return _rolesList.firstWhere((rl) => rl.roleId == roleId);
+  }
+
 }

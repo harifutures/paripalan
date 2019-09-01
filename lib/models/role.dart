@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 
-class Role {
-  final int roelId;
+class Role with ChangeNotifier {
+  final int roleId;
   final String roleName;
 
   Role({
-    @required this.roelId,
+    @required this.roleId,
     @required this.roleName
   });
 }

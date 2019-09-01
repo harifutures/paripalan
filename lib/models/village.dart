@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class Village {
+class Village with ChangeNotifier {
   final int villageId;
   final String villageName;
   final int mandalId;

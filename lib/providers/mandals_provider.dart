@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/mandal.dart';
 
 class MandalsProvider with ChangeNotifier {
+  List<Mandal> mandalsForDistrcit = [];
   List<Mandal> _mandalsList =[
     Mandal(
       mandalId: 1,
@@ -11,7 +12,7 @@ class MandalsProvider with ChangeNotifier {
     ),
     Mandal(
       mandalId: 1,
-      mandalName: 'Mangalagiri',
+      mandalName: 'China Kakani',
       districtId: 1,
       roleId: 7
     ),
@@ -23,7 +24,7 @@ class MandalsProvider with ChangeNotifier {
     ),
     Mandal(
       mandalId: 2,
-      mandalName: 'Avanigadda',
+      mandalName: 'Vuyyuru',
       districtId: 2,
       roleId: 7
     ),
@@ -52,4 +53,22 @@ class MandalsProvider with ChangeNotifier {
       roleId: 7
     )
   ];
+
+List<Mandal> get mandalList {
+  return [..._mandalsList];
+}
+
+Mandal findById(int mandalId) {
+   return _mandalsList.firstWhere((md) => md.mandalId == mandalId);
+}
+
+List<Mandal> findDistrictsByStateId (int districtId) {
+   return _mandalsList.where((md) => md.districtId == districtId).toList();
+}
+
+void setMandlasForDistrict(List<Mandal> mandalsForDistrict) {
+  this.mandalsForDistrcit = mandalsForDistrict;
+  notifyListeners();
+}
+
 }

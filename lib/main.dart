@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:paripalan/models/state.dart';
+import 'package:paripalan/models/role.dart';
+import 'package:paripalan/providers/role_provider.dart';
 import 'package:provider/provider.dart';
 
 import './providers/departments_provider.dart';
@@ -8,6 +9,10 @@ import './providers/districts_provider.dart';
 import './providers/mandals_provider.dart';
 import './providers/villages_provider.dart';
 import './providers/departments_provider.dart';
+import './providers/state.dart';
+import './models/district.dart';
+import './models/mandal.dart';
+import './models/village.dart';
 
 import './screens/home/navigations_screen.dart';
 
@@ -27,16 +32,31 @@ class MyApp extends StatelessWidget {
           value: StatesProvider(),
         ),
         ChangeNotifierProvider.value(
+          value: StateRastram(stateId: 0, stateName: ''),
+        ),
+        ChangeNotifierProvider.value(
           value: DistrictsProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: District(stateId: 0, districtId: 0, districtName: '' ),
         ),
         ChangeNotifierProvider.value(
           value: MandalsProvider(),
         ),
         ChangeNotifierProvider.value(
+          value: Mandal(),
+        ),
+        ChangeNotifierProvider.value(
           value: VillagesProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: StateRastram(stateId: 1, stateName: "hello"),
+          value: Village(),
+        ),
+        ChangeNotifierProvider.value(
+          value: RoleProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Role(),
         ),
       ],
       child: MaterialApp(

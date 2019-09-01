@@ -3,74 +3,75 @@ import '../models/district.dart';
 
 class DistrictsProvider with ChangeNotifier {
 
-  List<Distric> _districtList = [
-    Distric (
+  State _stateVar;
+  List<District> _districtList = [
+    District (
       districtId: 1,
       districtName: 'Guntur',
       stateId: 1,
       roleId: 3  // Role id is given for position, Ex: Every Mandal MRO office have Tasildar post/role.
     ),
-    Distric (
+ /*   District (
       districtId: 1,
       districtName: 'Guntur',
       stateId: 1,
       roleId: 4
     ),
-    Distric (
+    District (
       districtId: 1,
       districtName: 'Guntur',
       stateId: 1,
       roleId: 5
     ),
-    Distric (
+    District (
       districtId: 2,
       districtName: 'Krishna',
       stateId: 1,
       roleId: 3
     ),
-    Distric (
+    District (
       districtId: 2,
       districtName: 'Krishna',
       stateId: 1,
       roleId: 4
-    ),
-    Distric (
+    ),*/
+    District (
       districtId: 2,
       districtName: 'Krishna',
       stateId: 1,
       roleId: 5
     ),
-    Distric (
+    /*District (
       districtId: 3,
       districtName: 'Warnagal',
       stateId: 2,
       roleId: 3
     ),
-    Distric (
+    District (
       districtId: 3,
       districtName: 'Warnagal',
       stateId: 2,
       roleId: 4
-    ),
-    Distric (
+    ),*/
+    District (
       districtId: 3,
       districtName: 'Warnagal',
       stateId: 2,
       roleId: 5
     ),
-    Distric (
+    District (
       districtId: 4,
       districtName: 'Hyderabab',
       stateId: 2,
       roleId: 3
     ),
-    Distric (
+   /* District (
       districtId: 4,
       districtName: 'Hyderabad',
       stateId: 2,
       roleId: 4
-    ),
-    Distric (
+    ),*/
+    District (
       districtId: 4,
       districtName: 'Hyderabad',
       stateId: 2,
@@ -78,6 +79,18 @@ class DistrictsProvider with ChangeNotifier {
     ),
     
   ];
+
+List<District> get districtList {
+    return [..._districtList];
+}
+
+District findById(int districtId) {
+   return _districtList.firstWhere((dt) => dt.districtId == districtId);
+}
+
+List<District> findDistrictsByStateId (int stateId) {
+   return _districtList.where((dt) => dt.stateId == stateId).toList();
+}
 
 
 }
