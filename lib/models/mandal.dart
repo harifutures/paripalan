@@ -13,4 +13,8 @@ Mandal ({
   this.roleId
 });
 
+bool operator ==(o) => o is Mandal && o.mandalName == mandalName && o.mandalId == mandalId && o.roleId == roleId;
+int get hashCode => mandalName.hashCode^mandalId.hashCode^roleId.hashCode;
+/*bool operator ==(o) => o is Mandal && o.mandalName == mandalName;
+int get hashCode => mandalName.hashCode;*/
 }

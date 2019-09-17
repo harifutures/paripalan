@@ -84,9 +84,11 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
                                 setState(() =>                                   //newContact.favoriteColor = newValue;
                                   _stateRastram = newValue
                                 );
-
+                                  
                                   final districtList = Provider.of<DistrictsProvider>(ctx);
                                   districts = districtList.findDistrictsByStateId(_stateRastram.stateId);
+                                  districtList.setDistrict(null);
+                                  districtList.setDistrictsForState(districts);
                                   //_updateDistricts(districtList);
                                   print("After saving districts...");
                                  // state.d idChange(newValue);
@@ -101,7 +103,9 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
 
                     ),
                   ),
-                  _stateRastram != null ? DistrictsDropDown(districts: districts,): Container(),
+                  //_stateRastram != null ? DistrictsDropDown(): Container(),
+                  
+                  DistrictsDropDown(),
 
                  // _districtsDropDown(),
                   // Consumer<District> ( // Districts
@@ -129,8 +133,8 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
                   Container(
                      //child: callMandalWidget(_stateRastram, mandalProvider)
                      child:
-                     (mandalProvider.mandalsForDistrcit != null && mandalProvider.mandalsForDistrcit.length != 0) 
-                      ? MandalsDropDown(mandals: mandalProvider.mandalsForDistrcit) :Container()
+                     (mandalProvider.mandalsForDistricts != null && mandalProvider.mandalsForDistricts.length != 0) 
+                      ? MandalsDropDown(mandals: mandalProvider.mandalsForDistricts) :Container()
                   )
                   ),
                   /*Container(
@@ -149,13 +153,12 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
     );
   }
 
-   Widget callMandalWidget(StateRastram stateRastram, MandalsProvider mandalProvider) {
+   /*Widget callMandalWidget(StateRastram stateRastram, MandalsProvider mandalProvider) {
     if(stateRastram != null) {
-      MandalsDropDown(mandals: mandalProvider.mandalsForDistrcit);
+      MandalsDropDown(mandals: mandalProvider.mandalsForDistricts);
     } else {
       return Row(children: <Widget>[],);
       //return Container();
     }
-                    
-  }
+  }*/
 }

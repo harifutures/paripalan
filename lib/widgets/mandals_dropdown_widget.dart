@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:paripalan/widgets/villages_dropdown_widget%20copy.dart';
 import '../models/mandal.dart';
 import '../models/village.dart';
+import '../providers/mandals_provider.dart';
+import 'package:paripalan/models/village.dart';
+import '../providers/villages_provider.dart';
 import 'package:provider/provider.dart';
 
 
@@ -17,10 +21,12 @@ class _MandalsDropDownState extends State<MandalsDropDown> {
 
   Mandal _mandal;
   List<Mandal> mandals = [];
+  List<Village> villages = [];
   
   @override
   Widget build(BuildContext context) {
-    print("inside districts widget..");
+    print("inside Mandals widget..");
+    final mandalsList = Provider.of<MandalsProvider>(context);
     return Row (
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -34,19 +40,25 @@ class _MandalsDropDownState extends State<MandalsDropDown> {
                     child:  new DropdownButtonHideUnderline(
                       child: DropdownButton<Mandal> (
                         hint: new Text("Select Mandal"),
-                        items: (widget.mandals != null && widget.mandals.length != 0) 
-                        ? widget.mandals.map((Mandal value) {
+                        items: (mandalsList.mandalsForDistricts != null && mandalsList.mandalsForDistricts.length != 0) 
+                        ? mandalsList.mandalsForDistricts.map((Mandal value) {
                             return new DropdownMenuItem(
                               value: value,
                               child: new Text(value.mandalName),
                             );
                           }).toList() : Container(),
-                        value: _mandal,
+                        value: mandalsList.getMandal,
                         isDense: true,
                         onChanged: (Mandal newValue) {
-                          setState(() =>                                   
+                          mandalsList.setMandal(newValue);
+                          setState(() =>          
                             _mandal = newValue
                           );
+
+                          final villagesList = Provider.of<VillagesProvider>(context);
+                          villages = villagesList.findVillagesByMandalId(_mandal.mandalId);
+                          villagesList.setVillagesForMandal(villages);
+                          villagesList.setVillage(null); // This set village value to null on load
                           
                         }
 
@@ -54,6 +66,7 @@ class _MandalsDropDownState extends State<MandalsDropDown> {
                     ),
                   )
               ),
+              VillagesDropDown(),
             ],
     );
 

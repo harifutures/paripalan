@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/district.dart';
 
 class DistrictsProvider with ChangeNotifier {
-
-  State _stateVar;
+List<District> _districtsForState = [];
+District _district;
   List<District> _districtList = [
     District (
       districtId: 1,
@@ -70,13 +70,13 @@ class DistrictsProvider with ChangeNotifier {
       districtName: 'Hyderabad',
       stateId: 2,
       roleId: 4
-    ),*/
+    ),
     District (
       districtId: 4,
       districtName: 'Hyderabad',
       stateId: 2,
       roleId: 5
-    ),
+    ),*/
     
   ];
 
@@ -92,5 +92,18 @@ List<District> findDistrictsByStateId (int stateId) {
    return _districtList.where((dt) => dt.stateId == stateId).toList();
 }
 
+List<District> get districtsForState => _districtsForState;
+
+void setDistrictsForState(List<District> districtsForState) {
+  this._districtsForState = districtsForState;
+  notifyListeners();
+}
+
+void setDistrict(District district) {
+  this._district = district;
+  notifyListeners();
+}
+
+District get getDistrict => _district;
 
 }

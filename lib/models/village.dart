@@ -13,4 +13,7 @@ Village ({
   this.roleId,
 });
 
+bool operator ==(v) => v is Village && v.villageName == villageName && v.villageId == villageId;
+int get hashCode => villageName.hashCode^villageId.hashCode;
+
 }

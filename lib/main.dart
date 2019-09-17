@@ -32,13 +32,13 @@ class MyApp extends StatelessWidget {
           value: StatesProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: StateRastram(stateId: 0, stateName: ''),
+          value: StateRastram(),
         ),
         ChangeNotifierProvider.value(
           value: DistrictsProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: District(stateId: 0, districtId: 0, districtName: '' ),
+          value: District(),
         ),
         ChangeNotifierProvider.value(
           value: MandalsProvider(),

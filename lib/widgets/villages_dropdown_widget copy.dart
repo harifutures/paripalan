@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:paripalan/models/village.dart';
+import '../providers/villages_provider.dart';
 import '../models/district.dart';
+import 'package:provider/provider.dart';
 
 
-class DistrictsDropDown extends StatefulWidget {
-    List<District> districts = [];
-    DistrictsDropDown({Key key, this.districts}) : super(key: key);
-
+class VillagesDropDown extends StatefulWidget {
+    
     @override
-    _DistrictDropDownState createState() => _DistrictDropDownState();
+    _VillagesDropDownState createState() => _VillagesDropDownState();
 }
 
 
-class _DistrictDropDownState extends State<DistrictsDropDown> {
+class _VillagesDropDownState extends State<VillagesDropDown> {
 
-  District _district;
+  Village _village;
   
 
   bool isListEmpty(List<District> list) {
@@ -25,7 +26,8 @@ class _DistrictDropDownState extends State<DistrictsDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    print("inside districts widget..");
+    print("inside Villages widget..");
+    final villagesList = Provider.of<VillagesProvider>(context);
     return SingleChildScrollView(
                           child: Container(
                           // decoration: InputDecoration(
@@ -37,33 +39,34 @@ class _DistrictDropDownState extends State<DistrictsDropDown> {
                             // child: 
                            // new DropdownButtonHideUnderline(
                               
-                            child: DropdownButton<District> (
-                              hint: new Text("Select District"),
+                            child: DropdownButton<Village> (
+                              hint: new Text("Select Village"),
                             //  items: districtList.findDistrictsByStateId(newTemp.stateId).map((District value) {
                               
-                                items: widget.districts != null ? widget.districts.map((District value) {
-                                 return new DropdownMenuItem<District>(
+                                items: villagesList.villagesForMandal != null ? villagesList.villagesForMandal.map((Village value) {
+                                 return new DropdownMenuItem<Village>(
                                    value: value,
-                                   child: new Text(value.districtName),
+                                   child: new Text(value.villageName),
                                  );
                                }).toList() : [],
                               
-                              value: _district,
+                              value: villagesList.getVillage,
                               isDense: true,
-                              onChanged: (District newValue) {
-                                print("District dropdown, begin onchange..");
-                                _district = newValue;
+                              onChanged: (Village newValue) {
+                                print("Village dropdown, begin onchange..");
+                                villagesList.setVillage(newValue);
+                                _village = newValue;
                                 // setState(() =>                                   
                                 //   _district = newValue
                                 //  // state.didChange(newValue);
                                 // );
                                 setState(() => {                                   
-                                  _district = newValue,
-                                  print("District dropdown, setstate..")
+                                  _village = newValue,
+                                  print("Village dropdown, setstate..")
                                 //  state.didChange(newValue)
                                 }
                                 );
-                                print("District dropdown, end onchange..");
+                                print("Village dropdown, end onchange..");
                               },
 
                             ),

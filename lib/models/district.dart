@@ -13,11 +13,8 @@ District ({
   this.roleId
 });
 
-bool operator ==(o) => o is District && o.districtName == districtName && o.districtId == districtId && o.stateId == stateId;
-int get hashCode => districtName.hashCode^districtId.hashCode^stateId.hashCode;
-
-
-// bool operator ==(o) => o is Person && name == o.name && age == o.age;
-//   int get hashCode => hash2(name.hashCode, age.hashCode);
-
+bool operator ==(o) => o is District && o.districtName == districtName && o.districtId == districtId && o.roleId == roleId;
+int get hashCode => districtName.hashCode^districtId.hashCode^roleId.hashCode;
+/*bool operator ==(o) => o is District && o.districtName == districtName;
+int get hashCode => districtName.hashCode;*/
 }
