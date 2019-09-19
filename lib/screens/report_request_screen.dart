@@ -20,15 +20,16 @@ import '../models/Role.dart';
 import '../widgets/districts_dropdown_widget.dart';
 import '../widgets/mandals_dropdown_widget.dart';
 import '../widgets/dropdowns_widget.dart';
+import '../widgets/main_drawer.dart';
 
-class Complaints extends StatefulWidget {
-  
+class ReportRequest extends StatefulWidget {
+  static const routeName = '/reportRequest';
   
   @override
-  _ComplaintsState createState() => _ComplaintsState();
+  _ReportRequestState createState() => _ReportRequestState();
 }
 
-class _ComplaintsState extends State<Complaints> {
+class _ReportRequestState extends State<ReportRequest> {
   final _descriptionFocusNode = FocusNode();
 
   final _phoneFocusNode = FocusNode();
@@ -116,10 +117,10 @@ void _showMessage() {
     final roles = roleList.roleList;
     StateRastram newTemp; */
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Complaints Form')
-      // ),
-
+       /*appBar: AppBar(
+         title: Text('Complaints Form')
+       ),*/
+      drawer: MainDrawer(),
       body: Padding (
         padding: const EdgeInsets.all(16.0),
         child: Form (

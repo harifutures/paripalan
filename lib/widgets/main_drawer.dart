@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:paripalan/screens/profile_screen.dart';
+import 'package:paripalan/screens/report_request_screen.dart';
+import '../screens/subscribe_screen.dart';
+import '../screens/bucket_screen.dart';
 
 
 class MainDrawer extends StatelessWidget {
 
-  Widget buildListTile(String title, IconData icon) {
+  Widget buildListTile(String title, IconData icon, Function tapHandler) {
       return ListTile(
         leading: Icon(
           icon,
@@ -13,47 +17,60 @@ class MainDrawer extends StatelessWidget {
           title,
           style: TextStyle(
             //fontFamily: 'RobotoCondensed',
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: Colors.blueGrey
+            
           ),
         ),
-        onTap: () {
-          // ...
-        },
+        onTap: tapHandler,
       );
     }
 
   @override
   Widget build(BuildContext context) {
 
-    return Drawer (child: Column(
-      children: <Widget>[
-        Container(
-          height: 120,
-            width: double.infinity,
-            padding: EdgeInsets.all(20),
-            alignment: Alignment.centerLeft,
-            color: Theme.of(context).accentColor,
-            child: Text(
-              "Settings",
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 30,
-                color: Theme.of(context).primaryColor
-              ),
+    return Drawer (
+      elevation: 20.0,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+        UserAccountsDrawerHeader(
+          accountName: Text('Hari Prasad'),
+          accountEmail: Text('NoEmail@gmail.com'),
+          currentAccountPicture: GestureDetector(
+            child: CircleAvatar(
+              backgroundColor: Colors.grey,
+              child: Icon(Icons.person, color: Colors.white),
+            )
+          ),
 
-            ),
+          //Image.network('https://hammad-tariq.com/img/profile.png'),
+          decoration: BoxDecoration(color: Colors.blueAccent),
         ),
-        SizedBox(
-            height: 20,
-          ),
-          buildListTile(
+        buildListTile(
             'Subscribe',
-            Icons.restaurant,
-          ),
+            Icons.subscriptions,
+            () {Navigator.of(context).pushReplacementNamed(Subscribe.routeName);}
+        ),
+        Divider(
+          height: 2.0,
+        ),
           buildListTile(
             'Bucket',
-            Icons.settings,
+            Icons.notifications_active,
+            () {Navigator.of(context).pushReplacementNamed(Bucket.routeName);}
+        ),
+          Divider(
+            height: 2.0,
+          ),
+          buildListTile(
+            'Profile',
+            Icons.account_circle, 
+            () {Navigator.of(context).pushReplacementNamed(Profile.routeName);}
+        ),
+          Divider(
+            height: 2.0,
           ),
       ],
     ),

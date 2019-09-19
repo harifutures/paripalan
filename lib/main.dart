@@ -14,6 +14,9 @@ import './models/district.dart';
 import './models/mandal.dart';
 import './models/village.dart';
 
+import './screens/subscribe_screen.dart';
+import './screens/bucket_screen.dart';
+import './screens/profile_screen.dart';
 import './screens/home/navigations_screen.dart';
 
 void main() => runApp(MyApp());
@@ -65,6 +68,25 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: NavigationPage(),
+        //initialRoute: '/',
+        routes: {
+        //Complaints.routeName: (ctx) => Complaints(),
+        Subscribe.routeName: (ctx) => Subscribe(),
+        Bucket.routeName: (ctx) => Bucket(),
+      },
+      onGenerateRoute: (settings) {
+        print(settings.arguments);
+          if (settings.name == '/profile') {
+            return MaterialPageRoute(builder: (ctx) => Profile(),);
+          }
+        // } else if (settings.name == '/something-else') {
+        //   return ...;
+        // }
+        // return MaterialPageRoute(builder: (ctx) => CategoriesScreen(),);
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(builder: (ctx) => Profile(),);
+      }
       )
     );
   }

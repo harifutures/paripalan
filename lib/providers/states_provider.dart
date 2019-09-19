@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './state.dart';
 
 class StatesProvider with  ChangeNotifier {
+  StateRastram _stateRastram;
   List<StateRastram> _stateRastramList = [
     StateRastram (
       stateId: 1,
@@ -22,4 +23,10 @@ class StatesProvider with  ChangeNotifier {
   StateRastram findById(int stateId) {
     return _stateRastramList.firstWhere((st) => st.stateId == stateId);
   }
+
+  StateRastram setStateRastram(StateRastram stateRastram) {
+    this._stateRastram = stateRastram;
+  }
+
+  StateRastram get getStateRastram => _stateRastram;
 }

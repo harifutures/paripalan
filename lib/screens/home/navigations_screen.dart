@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:paripalan/widgets/main_drawer.dart';
-import '../complaints_screen.dart';
+import '../report_request_screen.dart';
 import '../myComplaints_screen.dart';
 import '../policies_screen.dart';
 import '../more_screen.dart';
@@ -26,7 +26,7 @@ class NavigationPageState extends State<NavigationPage> {
 
   final List<Map<String, Object>> _pages = [
     {
-      'page': Complaints(),
+      'page': ReportRequest(),
       'title': 'Report a Problem',
     },
     {
@@ -56,6 +56,7 @@ class NavigationPageState extends State<NavigationPage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+              //icon: Icon(Icons.bug_report), 
               icon: Icon(Icons.record_voice_over), 
               title: Text('Complaint')),
           BottomNavigationBarItem(
@@ -69,8 +70,7 @@ class NavigationPageState extends State<NavigationPage> {
         fixedColor: Colors.deepPurple,
         onTap: _onItemTapped,
       ),
-      
-      );
+    );
   }
 
   void _onItemTapped(int index) {

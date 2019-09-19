@@ -73,15 +73,15 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
                                  );
                                }).toList() : [],
 
-                              value: _stateRastram,
+                              value: stateRastarmProvider.getStateRastram,
                               isDense: true,
                               onChanged: (StateRastram newValue) {
-                                _stateRastram = newValue;
+                                //_stateRastram = newValue;
+                                stateRastarmProvider.setStateRastram(newValue);
                                 //isStateSelected = true; 
                                 //newTemp = newValue;
                                 
-                                
-                                setState(() =>                                   //newContact.favoriteColor = newValue;
+                                setState(() =>
                                   _stateRastram = newValue
                                 );
                                   
