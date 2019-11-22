@@ -47,7 +47,8 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
     print('inside Drop Drown widget Begin..');
 
     return Column (
-      crossAxisAlignment: CrossAxisAlignment.start,
+      
+      crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -63,6 +64,8 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
                           //   icon: const Icon(Icons.color_lens),
                           //   labelText: 'State',
                           // ),
+                          //*** Need to fix the size between 2 dropdowns
+                          //padding: const EdgeInsets.all(), 
                           child:  new DropdownButtonHideUnderline(
                             child: DropdownButton<StateRastram> (
                               hint: new Text("Select State"),

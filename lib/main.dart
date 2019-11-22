@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paripalan/models/role.dart';
 import 'package:paripalan/providers/role_provider.dart';
+import 'package:paripalan/providers/users_provider.dart';
 import 'package:provider/provider.dart';
 
 import './providers/departments_provider.dart';
@@ -13,11 +14,13 @@ import './providers/state.dart';
 import './models/district.dart';
 import './models/mandal.dart';
 import './models/village.dart';
+import './models/user.dart';
 
 import './screens/subscribe_screen.dart';
 import './screens/bucket_screen.dart';
 import './screens/profile_screen.dart';
 import './screens/home/navigations_screen.dart';
+import './screens/home/home_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -61,6 +64,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Role(),
         ),
+        ChangeNotifierProvider.value(
+          value: UserProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: User(),
+        )
+        
       ],
       child: MaterialApp(
         title: 'Paripalan',
@@ -68,6 +78,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: NavigationPage(),
+       // home: HomePage(),
         //initialRoute: '/',
         routes: {
         //Complaints.routeName: (ctx) => Complaints(),

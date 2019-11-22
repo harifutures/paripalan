@@ -19,6 +19,7 @@ District _district;
     ),
     District (
       districtId: 1,
+      
       districtName: 'Guntur',
       stateId: 1,
       roleId: 5

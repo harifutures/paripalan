@@ -5,6 +5,7 @@ import '../report_request_screen.dart';
 import '../myComplaints_screen.dart';
 import '../policies_screen.dart';
 import '../more_screen.dart';
+import '../profile_screen.dart';
 
 class NavigationPage extends StatefulWidget {
   NavigationPage({Key key}) : super(key: key);
@@ -31,15 +32,15 @@ class NavigationPageState extends State<NavigationPage> {
     },
     {
       'page': MyComplaints(),
-      'title': 'Reported Problems',
+      'title': 'View Requests',
     },
     {
       'page': GovtPolicies(),
       'title': 'Policies Progress Report',
     },
     {
-      'page': More(),
-      'title': 'Policies Progress Report',
+      'page': Profile(),
+      'title': 'More Details',
     },
     
   ];
