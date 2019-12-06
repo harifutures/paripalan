@@ -1,6 +1,5 @@
 import 'dart:io';
 //import '../screens/HomePage.dart';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,12 +29,13 @@ import '../models/appConstants.dart';
 
 //import 'package:image_picker/image_picker.dart';
 
-class MyPersonalInformationScreen extends StatefulWidget {
+class MyPersonalInformation extends StatefulWidget {
 
   //MyPersonalInformationPage({Key key, this.title, this.userProvider }) : super(key: key);
+  static const routeName = '/viewPersonalInformationScreen';
 
   @override
-  _MyPersonalInformationScreenState createState() => _MyPersonalInformationScreenState();
+  _MyPersonalInformationState createState() => _MyPersonalInformationState();
 
 }
 
@@ -49,7 +49,7 @@ class MyPersonalInformationScreen extends StatefulWidget {
   }
 }*/
 
-class _MyPersonalInformationScreenState extends State<MyPersonalInformationScreen> {
+class _MyPersonalInformationState extends State<MyPersonalInformation> {
 
   Map<String, String> userInfo;
   List<TextEditingController> textControllers;
@@ -129,11 +129,12 @@ class _MyPersonalInformationScreenState extends State<MyPersonalInformationScree
     super.dispose();
   }
 
-_saveForm1(){}
   _saveForm(UserProvider userProvider) {
     //_showMessage();
 
-    userProvider.saveUserProfile(userProvider.user);
+      Provider.of<UserProvider>(context).saveUserProfile(
+                        userProvider.findById(1));
+    //userProvider.saveUserProfile(userProvider.user);
 
     // final isValid = _form.currentState.validate();
     // if (!isValid) {
@@ -146,7 +147,7 @@ _saveForm1(){}
     // } else {
     //   Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
     // }
-    // Navigator.of(context).pop();
+     Navigator.of(context).pop();
   }
 
   void _showMessage(BuildContext  context){
@@ -166,13 +167,21 @@ _saveForm1(){}
   @override
   Widget build(BuildContext context) {
     print("inside personalInfoPage...");
+    /*final _stateRastarmProvider = Provider.of<StatesProvider>(context);
+    final _districtsProvider = Provider.of<DistrictsProvider>(context);
+    final _mandalsProvider = Provider.of<MandalsProvider>(context);
+    final _villagesProvider = Provider.of<VillagesProvider>(context);
+    //final _rolesProvider = Provider.of<RoleProvider>(context, listen: false);*/
     final _userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
        appBar: AppBar(
         title: Text('Personal Information'),
         actions: <Widget>[
           MaterialButton(
-            onPressed: null,
+            onPressed: () => { 
+              _saveForm(_userProvider),
+            },
             child: Text(
               'Save',
               style: TextStyle(
@@ -198,12 +207,6 @@ _saveForm1(){}
           child: ListView (
             padding: const EdgeInsets.all(15),
             children: <Widget>[
-              //Populate DropDowns.
-              Container(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: RegionDropDowns(),
-              ),
-             // RegionDropDowns(),
               TextFormField(
                   initialValue: _initValues['Phone'],
                   controller: TextEditingController(text: _userProvider.findById(1).phoneNumber.toString()),
@@ -277,6 +280,13 @@ _saveForm1(){}
                 crossAxisAlignment: CrossAxisAlignment.end,
               ),
 
+              //Populate DropDowns.
+              Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: RegionDropDowns(),
+              ),
+             // RegionDropDowns(),
+
               Center(
                 heightFactor: 5,
                 child: _image == null ? Text(
@@ -306,17 +316,23 @@ _saveForm1(){}
                   return Center(
                     heightFactor: 2,
                     child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.blueGrey),
+                      ),
+                      color: Colors.blueGrey,
+                      splashColor: Colors.purple,
                       child: Text('SAVE'),
                       //focusColor: Colors.blue,
                       //highlightColor: Colors.purple,
                       //hoverColor: Colors.purpleAccent,
-                      splashColor: Colors.blue[300],
                       //color: Colors.purpleAccent,
                       onPressed: () => {
                         Scaffold.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.purpleAccent,
+                          backgroundColor: Colors.blue[100],
                           content: Text(
                             'Saving..',
+                            style: TextStyle(color: Colors.purpleAccent, fontSize: 15),
                             ),
                           /*
                           //In case if want to add some action to SnackBar
@@ -328,8 +344,7 @@ _saveForm1(){}
                         ),*/
                         ),
                         ),
-                        Provider.of<UserProvider>(context, listen: false).saveUserProfile(
-                        _userProvider.findById(1))
+                        _saveForm(_userProvider),
                       },
                     ),
                   );

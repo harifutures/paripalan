@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:paripalan/models/address.dart';
+import 'package:paripalan/providers/users_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker_modern/image_picker_modern.dart';
 
 import '../providers/departments_provider.dart';
 import '../providers/states_provider.dart';
@@ -41,6 +45,8 @@ class _ReportRequestState extends State<ReportRequest> {
   final _form = GlobalKey<FormState>();
 
   var _isInit = true;
+
+  File _image;
 
   var _initValues = {
     'title': '',
@@ -96,10 +102,70 @@ class _ReportRequestState extends State<ReportRequest> {
 
 void _showMessage() {
     Scaffold.of(context)
-        .showSnackBar(new SnackBar(content: new Text("Submitting Form..")));
+        .showSnackBar(new SnackBar(
+          content: new Text(
+            "Submitting Form..",
+            style: TextStyle(color: Colors.purpleAccent, fontSize: 15),
+            ),
+          backgroundColor: Colors.blue[100],
+          ));
   }
 
+  Future getImage() async {
+    /*We can choose ImageSource as camera or gallery whatever is required.*/ 
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
+    setState(() {
+      _image = image;
+    });
+  }
+
+  Row breadCrumb(UserProvider userProvider) {
+    if(null != userProvider && null != userProvider.findById(1) 
+                            && null != userProvider.findById(1).address.getStateRastram
+                            && null != userProvider.findById(1).address.getStateRastram.stateName) {
+            
+            Address address = userProvider.findById(1).address;
+            String stateName = "";
+            String districtName = "";
+            String mandalName = "";
+            String villageName = "";
+            //stateName = address.getStateRastram.stateName;
+            return Row (
+              children: [
+                /*if(null != stateName && "" != stateName) 
+                  buildBreadCrumbValue(stateName),*/
+                if(null != address.getDistrict && "" != address.getDistrict.districtName && "" != address.getDistrict.districtName)
+                  buildBreadCrumbValue(address.getDistrict.districtName, true),
+                if(null != address.getMandal && "" != address.getMandal.mandalName && "" != address.getMandal.mandalName)
+                  buildBreadCrumbValue(address.getMandal.mandalName, true),
+                if(null != address.getVillage && "" != address.getVillage.villageName && "" != address.getVillage.villageName)
+                  buildBreadCrumbValue(address.getVillage.villageName, false),
+            ]);
+        }
+  }
+
+  RichText buildBreadCrumbValue(String name, bool attachIcon) {
+    return RichText(
+            text: new TextSpan(
+              children: [
+                TextSpan(
+                  text: name, 
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black54,
+                    backgroundColor: Colors.blue[100]
+                  )
+                ),
+                if(attachIcon)
+                  WidgetSpan(
+                    child: new Icon(Icons.arrow_forward, color: Colors.black45),
+                  ),
+              ]),
+          );
+  }
   @override
   Widget build (BuildContext context) {
     /*final departmentsData = Provider.of<Departments>(context);
@@ -116,6 +182,15 @@ void _showMessage() {
     final roleList = Provider.of<RoleProvider>(context, listen: false);
     final roles = roleList.roleList;
     StateRastram newTemp; */
+    final stateRastarmProvider = Provider.of<StatesProvider>(context);
+    final _userProvider = Provider.of<UserProvider>(context);
+    String stateName = "";
+    if(null != _userProvider && null != _userProvider.findById(1)
+                             && null != _userProvider.findById(1).address
+                             && null != _userProvider.findById(1).address.getStateRastram) {
+      stateName = _userProvider.findById(1).address.getStateRastram.stateName;
+    }
+    
     return Scaffold(
        /*appBar: AppBar(
          title: Text('Complaints Form')
@@ -126,36 +201,14 @@ void _showMessage() {
         child: Form (
           child: ListView (
             children: <Widget>[
+              if(null != stateName && "" != stateName)
+                Container(
+                  padding: EdgeInsets.only(),
+                  child: breadCrumb(_userProvider),
+                ),
+              
               //Populate DropDowns.
-              RegionDropDowns(),
-              TextFormField (
-                initialValue: _initValues['title'],
-                decoration: InputDecoration(
-                  icon: Icon(Icons.person),
-                  hintText: 'Enter Your Last Name and FirstName',
-                  labelText: 'Title'
-                  ),
-                textInputAction: TextInputAction.next,
-                onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_descriptionFocusNode);
-                },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please provide a value.';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  // _editedProduct = Product(
-                  //     title: value,
-                  //     price: _editedProduct.price,
-                  //     description: _editedProduct.description,
-                  //     imageUrl: _editedProduct.imageUrl,
-                  //     id: _editedProduct.id,
-                  //     isFavorite: _editedProduct.isFavorite);
-                }
-              ),
-
+             // RegionDropDowns(),
               TextFormField(
                 initialValue: _initValues['description'],
                 decoration: InputDecoration(
@@ -164,9 +217,9 @@ void _showMessage() {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
-                onFieldSubmitted: (_) {
+                /*onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_phoneFocusNode);
-                },
+                },*/
                 validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter a description.';
@@ -188,37 +241,22 @@ void _showMessage() {
                   }
               ),
 
-              TextFormField(
-                  initialValue: _initValues['Phone'],
-                  decoration: InputDecoration(labelText: 'Phone'),
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly,
-                    ],
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter phone number.';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Please enter a valid number.';
-                    }
-                    if (double.parse(value) < 10) {
-                      return 'Phone number should be 10 digits.';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    // _editedProduct = Product(
-                    //     title: _editedProduct.title,
-                    //     price: double.parse(value),
-                    //     description: _editedProduct.description,
-                    //     imageUrl: _editedProduct.imageUrl,
-                    //     id: _editedProduct.id,
-                    //     isFavorite: _editedProduct.isFavorite);
-                  },
+              Center(
+                heightFactor: 5,
+                child: _image == null ? Text(
+                  'Photo Attachment',
+                  style: TextStyle(color: Colors.blue, fontSize: 15),
+                ) : Image.file(_image),
               ),
-              Row(
+              Padding (
+              padding: EdgeInsets.only(top:10),
+              child: new  FloatingActionButton(
+                onPressed: getImage,
+                tooltip: 'Pick Image',
+                child: Icon(Icons.add_a_photo),
+              )
+              ),
+  /*            Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Container(
@@ -285,10 +323,17 @@ void _showMessage() {
                     
                 ],
               ),
-
-              new Container(
-                padding: const EdgeInsets.only(left: 40.0, top: 20.0),
+*/
+              new Center(
+                //padding: const EdgeInsets.only(left: 40.0, top: 20.0),
+                heightFactor: 2,
                 child: new RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                    side: BorderSide(color: Colors.blueGrey),
+                  ),
+                  color: Colors.blueGrey,
+                  splashColor: Colors.purple,
                   child: const Text('Send'),
                   onPressed: _saveForm,
                 )

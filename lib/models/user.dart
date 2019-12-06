@@ -8,7 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';*/
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import '../models/Users.dart';
+import '../models/role.dart';
+import '../models/address.dart';
 
 class User with ChangeNotifier {
 
@@ -21,11 +22,11 @@ class User with ChangeNotifier {
   String password;
   String bio;
   String city;
-  String location;
-  bool isHost;
+  Address address;
   bool isCurrentlyHosting;
   String imagePath;
   MemoryImage displayImage;
+  Role role;
 
   User({
     this.userId, 
@@ -34,13 +35,18 @@ class User with ChangeNotifier {
     this.phoneNumber, 
     this.email,
     this.bio,
-    this.location,
+    this.address,
     this.isCurrentlyHosting,
     this.imagePath,
     this.city,
-    this.isHost 
+    this.role
   });
 
+  Address get getAddress => this.address;
+
+  Role get getRole => this.role;
+
+  int get getUserId => this.userId;
 
  /* super(firstName:firstName, lastName:lastName, phoneNumber: phoneNumber, imagePath: imagePath)  {
     this.isHost = false;

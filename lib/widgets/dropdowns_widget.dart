@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import '../providers/states_provider.dart';
 import '../providers/districts_provider.dart';
 import '../providers/mandals_provider.dart';
+import '../providers/users_provider.dart';
 
 import '../providers/state.dart';
 import '../models/district.dart';
@@ -41,13 +42,21 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
 3) If both set to false, then we are not seeing mandals dropdown
   */
     final stateRastarmProvider = Provider.of<StatesProvider>(context);
-    final statesRastram = stateRastarmProvider.stateRastramList;
+    List<StateRastram> stateRastrams = stateRastarmProvider.stateRastramList;
     
-    final mandalProvider = Provider.of<MandalsProvider>(context);
     print('inside Drop Drown widget Begin..');
+    
+    final userProvider = Provider.of<UserProvider>(context);
+    final _districtList = Provider.of<DistrictsProvider>(context);
+    
+    String stateRastramDropDownHintVal = "Select State";
+    if(null != userProvider && null != userProvider.findById(1) 
+                && null != userProvider.findById(1).getAddress
+                && null != userProvider.findById(1).getAddress.getStateRastram) {
+      stateRastramDropDownHintVal = userProvider.findById(1).getAddress.getStateRastram.stateName;
+    }
 
     return Column (
-      
       crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Row(
@@ -68,19 +77,24 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
                           //padding: const EdgeInsets.all(), 
                           child:  new DropdownButtonHideUnderline(
                             child: DropdownButton<StateRastram> (
-                              hint: new Text("Select State"),
-                              items: statesRastram.length != 0 ? statesRastram.map((StateRastram value) {
+                              hint: new Text(stateRastramDropDownHintVal),
+                              items: stateRastrams.length != 0 ? stateRastrams.map((StateRastram value) {
                                  return new DropdownMenuItem <StateRastram>(
                                    value: value,
                                    child: new Text(value.stateName),
                                  );
                                }).toList() : [],
 
-                              value: stateRastarmProvider.getStateRastram,
+                              value: _stateRastram,
+                              //value: stateRastramVal,
                               isDense: true,
                               onChanged: (StateRastram newValue) {
                                 //_stateRastram = newValue;
-                                stateRastarmProvider.setStateRastram(newValue);
+                                //stateRastarmProvider.setStateRastram(newValue);
+                                if(null != userProvider && null != userProvider.findById(1) 
+                                                        && null != userProvider.findById(1).getAddress) {
+                                  userProvider.findById(1).getAddress.setStateRastram(newValue);
+                                }
                                 //isStateSelected = true; 
                                 //newTemp = newValue;
                                 
@@ -88,13 +102,19 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
                                   _stateRastram = newValue
                                 );
                                   
-                                  final districtList = Provider.of<DistrictsProvider>(ctx);
-                                  districts = districtList.findDistrictsByStateId(_stateRastram.stateId);
-                                  districtList.setDistrict(null);
-                                  districtList.setDistrictsForState(districts);
-                                  //_updateDistricts(districtList);
-                                  print("After saving districts...");
-                                 // state.d idChange(newValue);
+                                districts = _districtList.findDistrictsByStateId(_stateRastram.stateId);
+                                /*
+                                Set district value to NUll before rendering distric value in Districts widget.
+                                To fix the below Issue:
+                                'package:flutter/src/material/dropdown.dart': Failed assertion: line 620 pos 15:
+                                  'items == null || items.isEmpty || value == null || 
+                                  items.where((DropdownMenuItem<T> item) => item.value == value).length == 1': is not true.
+                                */
+                                _districtList.setDistrict(null);
+                                _districtList.setDistrictsForState(districts);
+                                //_updateDistricts(districtList);
+                                print("After saving districts...");
+                                // state.d idChange(newValue);
                                 
                               }
 
@@ -107,8 +127,10 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
                     ),
                   ),
                   //_stateRastram != null ? DistrictsDropDown(): Container(),
-                  
-                  DistrictsDropDown(),
+                  Container(
+                    padding: const EdgeInsets.only(left: 35),
+                    child: DistrictsDropDown(),
+                  ),
 
                  // _districtsDropDown(),
                   // Consumer<District> ( // Districts
@@ -130,16 +152,17 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   // Populate in a new row
-                  Consumer<Mandal> ( // StateRastram
-                    builder: (ctx3, mandal, _) =>
                   
-                  Container(
-                     //child: callMandalWidget(_stateRastram, mandalProvider)
-                     child:
-                     (mandalProvider.mandalsForDistricts != null && mandalProvider.mandalsForDistricts.length != 0) 
-                      ? MandalsDropDown(mandals: mandalProvider.mandalsForDistricts) :Container()
-                  )
-                  ),
+                   // Consumer<Mandal> ( // StateRastram
+                  //    builder: (ctx3, mandal, _) =>
+                    Container(
+                      child: callMandalWidget(userProvider)
+                        
+                    /*  child:
+                      (mandalProvider.mandalsForDistricts != null && mandalProvider.mandalsForDistricts.length != 0) 
+                        ? MandalsDropDown(mandals: mandalProvider.mandalsForDistricts) :Container()*/
+                    )
+                 //   ),
                   /*Container(
                     width: 100,
                     height: 100,
@@ -156,8 +179,18 @@ class _RegionDropDownsState extends State<RegionDropDowns> {
     );
   }
 
-   /*Widget callMandalWidget(StateRastram stateRastram, MandalsProvider mandalProvider) {
-    if(stateRastram != null) {
+   Widget callMandalWidget(UserProvider userProvider) {
+    final mandalsProvider = Provider.of<MandalsProvider>(context);
+     if(null != userProvider && null != userProvider.findById(1) 
+                                                           && null != userProvider.findById(1).getAddress) {
+        return MandalsDropDown(mandals: mandalsProvider.mandalsForDistricts);                                                             
+      } else {
+        return (mandalsProvider.mandalsForDistricts != null && mandalsProvider.mandalsForDistricts.length != 0) 
+                        ? MandalsDropDown(mandals: mandalsProvider.mandalsForDistricts) :Container();
+      }
+    }
+     
+    /*if(stateRastram != null) {
       MandalsDropDown(mandals: mandalProvider.mandalsForDistricts);
     } else {
       return Row(children: <Widget>[],);

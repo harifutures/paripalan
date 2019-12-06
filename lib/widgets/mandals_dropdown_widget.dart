@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:paripalan/widgets/villages_dropdown_widget%20copy.dart';
+import 'package:provider/provider.dart';
+
+import '../widgets/villages_dropdown_widget.dart';
 import '../models/mandal.dart';
 import '../models/village.dart';
 import '../providers/mandals_provider.dart';
 import 'package:paripalan/models/village.dart';
 import '../providers/villages_provider.dart';
-import 'package:provider/provider.dart';
+import '../providers/users_provider.dart';
+
 
 
 class MandalsDropDown extends StatefulWidget {
@@ -21,12 +24,22 @@ class _MandalsDropDownState extends State<MandalsDropDown> {
 
   Mandal _mandal;
   List<Mandal> mandals = [];
-  List<Village> villages = [];
   
   @override
   Widget build(BuildContext context) {
     print("inside Mandals widget..");
     final mandalsList = Provider.of<MandalsProvider>(context);
+    final _userProvider = Provider.of<UserProvider>(context);
+    String  mandalDropDownHintVal = "Select Mandal";
+    if(null != _userProvider && null != _userProvider.findById(1) 
+                && null != _userProvider.findById(1).getAddress
+                && null != _userProvider.findById(1).getAddress.getDistrict) {
+      mandals = mandalsList.findMandalsByDistrictId(_userProvider.findById(1).getAddress.getDistrict.districtId);
+      mandalDropDownHintVal = _userProvider.findById(1).getAddress.getMandal.mandalName;
+    } else { // When user login for the first time, there will not be any user's information.
+      mandals = mandalsList.mandalsForDistricts;
+    }
+
     return Row (
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -39,9 +52,9 @@ class _MandalsDropDownState extends State<MandalsDropDown> {
             //         return Container(
                     child:  new DropdownButtonHideUnderline(
                       child: DropdownButton<Mandal> (
-                        hint: new Text("Select Mandal"),
-                        items: (mandalsList.mandalsForDistricts != null && mandalsList.mandalsForDistricts.length != 0) 
-                        ? mandalsList.mandalsForDistricts.map((Mandal value) {
+                        hint: new Text(mandalDropDownHintVal),
+                        items: (mandals != null && mandals.length != 0) 
+                        ? mandals.map((Mandal value) {
                             return new DropdownMenuItem(
                               value: value,
                               child: new Text(value.mandalName),
@@ -51,13 +64,16 @@ class _MandalsDropDownState extends State<MandalsDropDown> {
                         isDense: true,
                         onChanged: (Mandal newValue) {
                           mandalsList.setMandal(newValue);
-                          setState(() =>          
+                          setState(() => {       
+                            if(null != _userProvider && null != _userProvider.findById(1)
+                                                && null != _userProvider.findById(1).getAddress) {
+                              _userProvider.findById(1).getAddress.setMandal(newValue),
+                            },
                             _mandal = newValue
-                          );
-
+                          });
                           final villagesList = Provider.of<VillagesProvider>(context);
-                          villages = villagesList.findVillagesByMandalId(_mandal.mandalId);
-                          villagesList.setVillagesForMandal(villages);
+                          List<Village> _villages = villagesList.findVillagesByMandalId(_mandal.mandalId);
+                          villagesList.setVillagesForMandal(_villages);
                           villagesList.setVillage(null); // This set village value to null on load
                           
                         }
@@ -66,7 +82,10 @@ class _MandalsDropDownState extends State<MandalsDropDown> {
                     ),
                   )
               ),
-              VillagesDropDown(),  // Need to add validation to hide if mandals not selected.
+              Container(
+                padding: const EdgeInsets.only(left: 35),
+                child: VillagesDropDown(),  // Need to add validation to hide if mandals not selected.
+              ),
             ],
     );
 

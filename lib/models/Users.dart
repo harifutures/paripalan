@@ -43,7 +43,7 @@ class Contact with ChangeNotifier {
     user.imagePath = this.imagePath;
     user.displayImage = this.displayImage;
     user.city = this.city;
-    user.isHost = this.isHost;
+   // user.isHost = this.isHost;
     return user;
   }
 

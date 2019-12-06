@@ -19,6 +19,8 @@ import './models/user.dart';
 import './screens/subscribe_screen.dart';
 import './screens/bucket_screen.dart';
 import './screens/profile_screen.dart';
+import './screens/personalInformation_screen.dart';
+import './screens/change_role_screen.dart';
 import './screens/home/navigations_screen.dart';
 import './screens/home/home_page.dart';
 
@@ -84,6 +86,9 @@ class MyApp extends StatelessWidget {
         //Complaints.routeName: (ctx) => Complaints(),
         Subscribe.routeName: (ctx) => Subscribe(),
         Bucket.routeName: (ctx) => Bucket(),
+        MyPersonalInformation.routeName: (ctx) => MyPersonalInformation(),
+        ChangeRole.routeName: (ctx) => ChangeRole(),
+
       },
       onGenerateRoute: (settings) {
         print(settings.arguments);
