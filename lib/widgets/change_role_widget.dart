@@ -29,12 +29,14 @@ import '../widgets/mandals_dropdown_widget.dart';
 import '../widgets/dropdowns_widget.dart';
 import '../widgets/main_drawer.dart';
 import '../widgets/change_role_form_widget.dart';
+import '../widgets/show_superUsers_widget.dart';
 import '../models/appConstants.dart';
 import '../utils/search_delegate.dart';
 
 class ChangeRoleWidget extends StatelessWidget {
 
   User changeRoleUser;
+  RoleProvider userProvider;
   //ChangeRoleWidget({Key key, this.changeRoleUser}) : super(key: key);
 
  /* @override
@@ -54,6 +56,7 @@ class ChangeRoleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     changeRoleUser = InheritedChangeRole.of(context).changeUserRoledata; 
+    userProvider = Provider.of<RoleProvider>(context);
     return showChangeRoleScreen(changeRoleUser, context);
   }
 
@@ -63,18 +66,16 @@ class ChangeRoleWidget extends StatelessWidget {
         //mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
          Container( 
-           padding: EdgeInsets.all(6.0),
-         /* margin: const EdgeInsets.fromLTRB(AppConstants.tinyPadding,
-                  AppConstants.smallPadding,
-                  AppConstants.tinyPadding,
-                  460.0,),
-          padding: const EdgeInsets.all(3.0),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blueAccent)
-          ),*/
+          padding: EdgeInsets.all(6.0),
           child:displayChangeRoleUser(changeRoleUser, context),
         ),
         ChangeRoleForm(),
+        /**TODO: super users is not  still statying in userprovider scope, we need to clear it after we come out of that screen if not not using else where,
+         *  validate all other screen also and clear the states before leaving the screens if not using else where.*/
+         Consumer<Role> ( // Districts
+            builder: (context, districtModel, child) =>
+                ShowSuperUsers(),
+         )
         
       ],
       );

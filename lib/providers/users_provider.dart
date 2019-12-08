@@ -13,6 +13,7 @@ import '../models/address.dart';
 class UserProvider with ChangeNotifier {
 
 RoleProvider roleProvider;
+List<User> _superUsers;
 static User user = User(
       userId: 1,
       firstName: "Hari Prasad",
@@ -76,6 +77,7 @@ static User user = User(
         roleId: 5,
         roleName: "Surpanch",
         divisionId: 1,
+        roleLayerId: 2,
         isSuperUser: true
       )
       //role: roleProvider.fidnById(roleId)
@@ -113,6 +115,7 @@ static User user = User(
         roleId: 4,
         roleName: "VRO",
         divisionId: 1,
+        roleLayerId: 2,
         isSuperUser: true
       )
       //role: roleProvider.fidnById(roleId)
@@ -150,6 +153,7 @@ static User user = User(
         roleId: 3,
         roleName: "Valunteer3",
         divisionId: 1,
+        roleLayerId: 1,
         isSuperUser: false
       )
       //role: roleProvider.fidnById(roleId)
@@ -187,6 +191,7 @@ static User user = User(
         roleId: 1,
         roleName: "Valunteer1",
         divisionId: 1,
+        roleLayerId: 1,
         isSuperUser: false
       )
       //role: roleProvider.fidnById(roleId)
@@ -312,7 +317,7 @@ Address address = Address (
   }
 
 
-  List<User> findAllUsersOfSameRoleLaneTemp(User changeRoleUser, Role requestingRole) {
+  List<User> findAllUsersOfSameRoleLaneTemp(User changeRoleUser, int roleLayerId, Role requestingRole) {
 
     Address address = changeRoleUser.getAddress;
     int districtId;
@@ -326,7 +331,7 @@ Address address = Address (
         mandalId = address.getMandal.mandalId;
     }
     if(null != address.getVillage) {
-        districtId = address.getVillage.villageId;
+        villageId = address.getVillage.villageId;
     }
 
     /**
@@ -335,25 +340,37 @@ Address address = Address (
     switch (requestingRole.divisionId) {
 
       case 1:
-        return _users.where((user) => 
-        user.getAddress.stateRastram.stateName == address.stateRastram.stateName &&
+        return _users.where((user) =>
+        null != user.role &&
+        null != user.role.getRoleLayerId &&
+        user.role.getRoleLayerId == roleLayerId &&
+        user.getAddress.stateRastram.stateId == address.stateRastram.stateId &&
         user.getAddress.getDistrict.districtId == districtId &&
         user.getAddress.getMandal.mandalId == mandalId &&
         user.getAddress.getVillage.villageId == villageId        
         ).toList();
       case 2:
         return _users.where((user) => 
+        null != user.role &&
+        null != user.role.getRoleLayerId &&
+        user.role.roleLayerId == roleLayerId &&
         user.getAddress.stateRastram.stateName == address.stateRastram.stateName &&
         user.getAddress.getDistrict.districtId == districtId &&
         user.getAddress.getMandal.mandalId == mandalId
         ).toList();
       case 3:
         return _users.where((user) => 
+        null != user.role &&
+        null != user.role.getRoleLayerId &&
+        user.role.roleLayerId == roleLayerId &&
         user.getAddress.stateRastram.stateName == address.stateRastram.stateName &&
         user.getAddress.getDistrict.districtId == districtId
         ).toList();
       case 4:
         return _users.where((user) => 
+        null != user.role &&
+        null != user.role.getRoleLayerId &&
+        user.role.roleLayerId == roleLayerId &&
         user.getAddress.stateRastram.stateName == address.stateRastram.stateName
         ).toList();  
 
@@ -361,6 +378,11 @@ Address address = Address (
     
   }
 
+  setSuperUsers(List<User> superUsers) {
+    this._superUsers = superUsers;
+  }
+
+  List<User> get getSuperUsers => _superUsers;
 
   saveUserProfile(User usertoSave) {
     print("inside save:Before Save: State Name:"+user.address.getStateRastram.stateName);

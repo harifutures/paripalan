@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:paripalan/widgets/show_superUsers_widget.dart';
 import 'package:provider/provider.dart';
 import '../models/role.dart';
 import '../models/user.dart';
-import '../models/roleLane.dart';
+import '../models/roleLayer.dart';
 import '../providers/role_provider.dart';
 import '../providers/users_provider.dart';
-import '../providers/roleLane_provider.dart';
+import '../providers/roleLayer_provider.dart';
 import '../widgets/inhertited_changeRole_stream_widget.dart';
 
 class ChangeRoleForm extends StatefulWidget {
@@ -29,6 +30,7 @@ class _ChangeRoleFormState extends State<ChangeRoleForm> {
   Role _roleToApply;
   List<User> superUsers;
   User changeRoleUser;
+  UserProvider _userProvider;
   static final String STATE_RADIO_NAME = "State";
   static final String DISTRICT_RADIO_NAME = "District";
   static final String MANDAL_RADIO_NAME = "Mandal";
@@ -47,6 +49,7 @@ class _ChangeRoleFormState extends State<ChangeRoleForm> {
   @override
   Widget build(BuildContext context) {
     changeRoleUser = InheritedChangeRole.of(context).changeUserRoledata;
+    _userProvider = Provider.of<UserProvider>(context);
   
    return //buildRadioButton();
      Container (
@@ -149,21 +152,30 @@ Widget populateRoles(String radioValue) {
                                   _roleToApply = newValue
                                 );
                                   
-                                  /*TODO: If the user is not super user, display only super users of that divisons
-                                    Else if
-                                      User is Super user and want to promote him self, then show the same verticle superUsers to approve.
+                                  /**
+                                   * To Pull Super Users who are eligible to approve for the requesting role
+                                   *  1) Select the Next RoleLayer (of same division) for the current requesting posItion.
+                                   *  2) If Next RoleLayer exists in that division, they are the super users for the current requesting role.
+                                   *  *   Else  Current layer is the last layer in that division, so some one from same team/same layer would approve the request (kind of role promotion but will be in same Layer).
+                                   * 
+                                   * IF the user is not super user, display only super users of that divisons
+                                   * Else if
+                                   *  User is Super user and want to promote him self, then show the same Layer users to approve (Except requester/himself).
                                   */
-                               /*   RoleLaneProvider roleLaneProvider = RoleLaneProvider();
-                                  RoleLane nextAvailableRoleLaneInDivision = roleLaneProvider.findNextRoleLaneByRoleLaneAndDivision(_roleToApply.roleLaneId, _roleToApply.divisionId);
-                                  //RoleLane nextAvailableRoleLaneInDivision = Provider.of<RoleLaneProvider>(context).findNextRoleLaneByRoleLaneAndDivision(_roleToApply.roleLaneId, _roleToApply.divisionId);
+                                  RoleLayer nextAvailableRoleLaneInDivision = RoleLayerProvider().findNextRoleLaneByRoleLaneAndDivision(_roleToApply.roleLayerId, _roleToApply.divisionId);
                                   
-                                  
-                                  if(null != nextAvailableRoleLaneInDivision) { // Next roleLane exists in this division
-                                    superUsers = Provider.of<UserProvider>(context).findAllUsersOfSameRoleLaneTemp(changeRoleUser, _roleToApply);
+                                  /**
+                                   * Next roleLayer exists in this division, if so pull all the users belong to that Role Layer.
+                                   */
+                                  if(null != nextAvailableRoleLaneInDivision) { 
+                                    superUsers = _userProvider.findAllUsersOfSameRoleLaneTemp(changeRoleUser, nextAvailableRoleLaneInDivision.roleLayerId, _roleToApply);
                                   } else {
-                                    
-                                  }*/
-                                
+                                    superUsers = _userProvider.findAllUsersOfSameRoleLaneTemp(changeRoleUser, _roleToApply.roleLayerId, _roleToApply);
+                                  }
+                                  _userProvider.setSuperUsers(superUsers);
+                                  ShowSuperUsers(superUsers1: superUsers);
+
+                                  
                               }
 
                             ),
@@ -182,10 +194,6 @@ Widget populateRoles(String radioValue) {
                                     fontWeight: FontWeight.bold, 
                                     color: null != _roleToApply ? Colors.white : Colors.black
                                     ),),
-                            //focusColor: Colors.blue,
-                            //highlightColor: Colors.purple,
-                            //hoverColor: Colors.purpleAccent,
-                            //color: Colors.purpleAccent,
                             onPressed: () => {
                               if(null != _roleToApply) {
                                 Scaffold.of(context).showSnackBar(SnackBar(
@@ -213,8 +221,6 @@ Widget populateRoles(String radioValue) {
 
                         ]
                         );
-                    //  } 
-                    //);
 
         }
 }

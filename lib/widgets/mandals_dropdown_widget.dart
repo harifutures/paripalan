@@ -36,7 +36,7 @@ class _MandalsDropDownState extends State<MandalsDropDown> {
                 && null != _userProvider.findById(1).getAddress.getDistrict) {
       mandals = mandalsList.findMandalsByDistrictId(_userProvider.findById(1).getAddress.getDistrict.districtId);
       mandalDropDownHintVal = _userProvider.findById(1).getAddress.getMandal.mandalName;
-    } else { // When user login for the first time, there will not be any user's information.
+    } else { // When user login for the first time, there will not be any user's information (TODO: revisit/modify this logic after login screen implementation done).
       mandals = mandalsList.mandalsForDistricts;
     }
 

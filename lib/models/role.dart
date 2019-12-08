@@ -5,7 +5,7 @@ class Role with ChangeNotifier {
   // Divisions are : state, district, Mandal, Village.
   final int divisionId;
   final String roleName;
-  final int roleLaneId;
+  final int roleLayerId;
   // Super user gets subscription requests notification and he has has permissions to approve that subscription under his division.
   final bool isSuperUser;
 
@@ -15,6 +15,9 @@ class Role with ChangeNotifier {
     // Divisions are : state, district, Mandal, Village.
     this.divisionId,
     this.isSuperUser,
-    this.roleLaneId
+    this.roleLayerId
   });
+
+  int get getRoleLayerId => this.roleLayerId;
+
 }
