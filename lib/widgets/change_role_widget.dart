@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:paripalan/widgets/inhertited_changeRole_stream_widget.dart';
+import 'package:paripalan/widgets/inhertited_division_stream_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker_modern/image_picker_modern.dart';
@@ -33,30 +34,31 @@ import '../widgets/show_superUsers_widget.dart';
 import '../models/appConstants.dart';
 import '../utils/search_delegate.dart';
 
-class ChangeRoleWidget extends StatelessWidget {
+class ChangeRoleWidget extends StatefulWidget {
 
+  @override
+  _ChangeRoleWidgetState createState() => _ChangeRoleWidgetState();
+}
+
+class _ChangeRoleWidgetState extends State<ChangeRoleWidget> {
   User changeRoleUser;
-  RoleProvider userProvider;
-  //ChangeRoleWidget({Key key, this.changeRoleUser}) : super(key: key);
 
- /* @override
-  void dispose() {
-   // _phoneFocusNode.dispose();
-    super.dispose();
-  }*/
-
-  /*_saveForm(UserProvider userProvider) {
-    //_showMessage();
-
-    Provider.of<UserProvider>(context).saveUserProfile(
-                        userProvider.findById(1));
-    Navigator.of(context).pop();
-  }*/
+  List<User> userProvider;
 
   @override
   Widget build(BuildContext context) {
-    changeRoleUser = InheritedChangeRole.of(context).changeUserRoledata; 
-    userProvider = Provider.of<RoleProvider>(context);
+    changeRoleUser = InheritedChangeRole.of(context).changeUserRoledata;
+    userProvider = Provider.of<UserProvider>(context).getSuperUsers;
+    if(null != InheritedSuperUsers.of(context) && null != InheritedSuperUsers.of(context).getSuperUsers()) {
+      userProvider = InheritedSuperUsers
+          .of(context)
+          .superUsersData;
+    }
+    if(null != userProvider) {
+      print("==> User Provider length:" + userProvider.length.toString());
+    } else {
+      print("==> ELSE User Provider length:");
+    }
     return showChangeRoleScreen(changeRoleUser, context);
   }
 
@@ -65,24 +67,18 @@ class ChangeRoleWidget extends StatelessWidget {
       return Column(
         //mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-         Container( 
+         Container(
           padding: EdgeInsets.all(6.0),
           child:displayChangeRoleUser(changeRoleUser, context),
         ),
-        ChangeRoleForm(),
+         ChangeRoleForm(),
         /**TODO: super users is not  still statying in userprovider scope, we need to clear it after we come out of that screen if not not using else where,
          *  validate all other screen also and clear the states before leaving the screens if not using else where.*/
-         Consumer<Role> ( // Districts
-            builder: (context, districtModel, child) =>
-                ShowSuperUsers(),
-         )
-        
       ],
       );
     }
   }
 
-  //Shows Search result
   void showSearchPage(BuildContext context,
       CustomSearchDelegate searchDelegate) async {
     final String selected = await showSearch<String>(
@@ -168,7 +164,7 @@ class ChangeRoleWidget extends StatelessWidget {
                             minFontSize: 2.0,
                            // presetFontSizes: [15],
                           ),
-                          
+
                       //  ],
                       //)
                     ],
@@ -201,5 +197,4 @@ class ChangeRoleWidget extends StatelessWidget {
     }
     return personalInfo;
   }
-
 }

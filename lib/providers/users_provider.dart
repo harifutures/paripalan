@@ -379,10 +379,11 @@ Address address = Address (
   }
 
   setSuperUsers(List<User> superUsers) {
+    print("set seuperusers"+superUsers.length.toString());
     this._superUsers = superUsers;
   }
 
-  List<User> get getSuperUsers => _superUsers;
+  List<User> get getSuperUsers => this._superUsers;
 
   saveUserProfile(User usertoSave) {
     print("inside save:Before Save: State Name:"+user.address.getStateRastram.stateName);
