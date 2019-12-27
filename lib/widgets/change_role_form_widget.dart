@@ -28,6 +28,8 @@ class _ChangeRoleFormState extends State<ChangeRoleForm> {
   List<User> superUsers;
   User changeRoleUser;
   UserProvider _userProvider;
+  bool isRoleApproved = false;
+
   static final String STATE_RADIO_NAME = "State";
   static final String DISTRICT_RADIO_NAME = "District";
   static final String MANDAL_RADIO_NAME = "Mandal";
@@ -47,12 +49,16 @@ class _ChangeRoleFormState extends State<ChangeRoleForm> {
     print("INSIDE WIDGET FORM");
     changeRoleUser = InheritedChangeRole.of(context).changeUserRoledata;
     _userProvider = Provider.of<UserProvider>(context);
-
+    double containerHight = 195.0;
+    //TODO: if(role is supervisor category then show the approve button or dont show for every one, enabling for now temporarily)
+    if(true) {
+      containerHight = 230.0;
+    }
     return Container(
         child: Column(children: <Widget>[
       Container(
           margin: EdgeInsets.all(3.0),
-          constraints: BoxConstraints(maxWidth: 355.0, maxHeight: 195.0),
+          constraints: BoxConstraints(maxWidth: 355.0, maxHeight: containerHight),
           padding: EdgeInsets.all(5.0),
           decoration: BoxDecoration(
               border: Border.all(color: Colors.blueAccent),
@@ -71,9 +77,23 @@ class _ChangeRoleFormState extends State<ChangeRoleForm> {
                 padding: const EdgeInsets.all(5.0),
                 child: buildRadioButton(MANDAL_RADIO_NAME, VILLAGE_RADIO_NAME),
               ),
-              SizedBox(
-                height: 17.0,
-              ),
+
+              //TODO: if(role is supervisor category then show the approve button or dont show for every one, enabling for now temporarily)
+              if(true)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Approve"),
+                    Checkbox(
+                      value: isRoleApproved,
+                      onChanged: (bool value) {
+                        setState(() {
+                          isRoleApproved = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               Container(
                 alignment: Alignment.bottomLeft,
                 //padding: const EdgeInsets.only(left: 0.0),
@@ -110,7 +130,9 @@ class _ChangeRoleFormState extends State<ChangeRoleForm> {
     //);
   }
 
-  _saveForm() {}
+  _saveForm() { // TODO: Save the screen
+    Navigator.pop(context);
+  }
 
   Widget populateRoles(String radioValue) {
     /*

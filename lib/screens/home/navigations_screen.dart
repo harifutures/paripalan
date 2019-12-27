@@ -1,58 +1,106 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:paripalan/widgets/main_drawer.dart';
-import '../report_request_screen.dart';
-import '../myComplaints_screen.dart';
+import '../service_request_screen.dart';
+import '../myService_requests_screen.dart';
 import '../policies_screen.dart';
 import '../more_screen.dart';
 import '../profile_screen.dart';
 
 class NavigationPage extends StatefulWidget {
-  NavigationPage({Key key}) : super(key: key);
+  int tabIndex;
+  static const routeName = "/navigationsPage";
+  NavigationPage({Key key, this.tabIndex}) : super(key: key);
 
   @override
   NavigationPageState createState() => NavigationPageState();
 
 }
 
-class NavigationPageState extends State<NavigationPage> {
+class NavigationPageState extends State<NavigationPage> {//}with SingleTickerProviderStateMixin {
 
-  int _selectedIndex = 0;
+  int _selectedIndex;
+  //TabController _tabController;
+  Widget _selectedPage;
+  int indexed = 0;
+
+  @override
+  void initState() {
+    //_selectedIndex = widget.selectedIndex;
+    super.initState();
+    _pages = [
+      {
+        'page': ServiceRequestScreen(),
+        'title': 'Service Request',
+      },
+      {
+        'page': MyServiceRequests(),
+        'title': 'View Requests',
+      },
+      {
+        'page': GovtPolicies(),
+        'title': 'Policies Progress Report',
+      },
+      {
+        'page': Profile(),
+        'title': 'More Details',
+      },
+
+    ];
+    _selectedIndex = 0;
+    _selectedPage = _pages[_selectedIndex]['page'];
+    //_tabController = TabController(vsync: this, length: _pages.length);
+  }
+
+  @override
+  void dispose() {
+    //_tabController.dispose();
+    print("DISPOSE=======");
+    super.dispose();
+  }
+
   final widgetOptions = [
-    Text('Complaint'),
-    Text('My Complaints'),
+    Text('Service Request'),
+    Text('My Requests'),
     Text('Policies'),
     Text('More'),
   ];
 
-  final List<Map<String, Object>> _pages = [
-    {
-      'page': ReportRequest(),
-      'title': 'Report a Problem',
-    },
-    {
-      'page': MyComplaints(),
-      'title': 'View Requests',
-    },
-    {
-      'page': GovtPolicies(),
-      'title': 'Policies Progress Report',
-    },
-    {
-      'page': Profile(),
-      'title': 'More Details',
-    },
-    
-  ];
+  List<Map<String, Object>> _pages;
 
   @override
   Widget build(BuildContext context) {
+    print("_selectedIndex ============="+_selectedIndex.toString());
+    print("widget.tabIndex ============="+widget.tabIndex.toString());
+   // indexed = ModalRoute.of(context).settings.arguments;
+    widget.tabIndex = ModalRoute.of(context).settings.arguments;
+    print("Indexed==========="+ indexed.toString());
+    if(null != widget.tabIndex && 0 != widget.tabIndex && indexed != 1) { // index = 1 to differentiate between tab 1 and others tabs
+    //if(indexed != null && 0 != indexed) {
+      _selectedIndex = widget.tabIndex;
+      _onItemTapped(_selectedIndex);
+   //   widget.tabIndex = 0;
+    }
+    print("_selectedIndex After============="+_selectedIndex.toString());
+    //_pages.forEach((i) => dynams.add(i));
+    //var names = _pages1[0] as List;
     return Scaffold (
-      appBar: AppBar(
+      // Hiding Appbar for 'Service Request' screen here as to customize it for 'save' button
+      appBar: _selectedIndex != 0 ? AppBar(
         title: Text(_pages[_selectedIndex]['title'])
-      ),
+      ) : null,
       drawer: MainDrawer(),
-      body: _pages[_selectedIndex]['page'],
+      body: _selectedPage,//_pages[_selectedIndex]['page'],
+      /*TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          ServiceRequestScreen(),
+          MyServiceRequests(),
+          GovtPolicies(),
+          Profile(),
+        ]
+      ),*/
+
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
@@ -77,7 +125,16 @@ class NavigationPageState extends State<NavigationPage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _selectedPage = _pages[_selectedIndex]['page'];
+      if(null != widget.tabIndex && 0 != widget.tabIndex) {
+        indexed = 1;
+      }
     });
+    /*if(null != widget.tabIndex && 0 != widget.tabIndex ) {
+      this.dispose();
+    }*/
+
+    //_tabController.animateTo(_selectedIndex);
   }
 
 

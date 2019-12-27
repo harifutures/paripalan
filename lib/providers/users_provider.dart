@@ -121,6 +121,44 @@ static User user = User(
       //role: roleProvider.fidnById(roleId)
     );
 
+static User superUser3 = User(
+    userId: 2,
+    firstName: "Janardhana Rao",
+    lastName: "Bandaru",
+    address: new Address (
+        userId: 2,
+        stateRastram: new StateRastram(
+          stateId: 1,
+          stateName: "Andhra Pradesh",
+        ),
+        district: new District(
+            districtId: 1,
+            districtName: "Guntur"
+        ),
+        mandal: new Mandal(
+            mandalId: 1,
+            mandalName: "Mangalagiri"
+        ),
+        village: new Village(
+            villageId: 1,
+            villageName: "Kaza"
+        ),
+        zipCode: 522503
+    ),
+    bio: "Working as sr engineer",
+    email: "hariprasad@gmail.com",
+    city: "Guntur",
+    phoneNumber: 1112223333,
+    role: new Role(
+        roleId: 6,
+        roleName: "VRO",
+        divisionId: 1,
+        roleLayerId: 2,
+        isSuperUser: true
+    )
+  //role: roleProvider.fidnById(roleId)
+);
+
     static User voulanteerUser1 = User(
       userId: 2,
       firstName: "Suresh",
@@ -282,7 +320,8 @@ Address address = Address (
     voulanteerUser1,
     voulanteerUser2,
     superUser1,
-    superUser2
+    superUser2,
+    superUser3
   ];
 
   List<User> get usersList {

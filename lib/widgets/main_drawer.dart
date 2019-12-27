@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paripalan/screens/profile_screen.dart';
-import 'package:paripalan/screens/report_request_screen.dart';
+import 'package:paripalan/screens/service_request_screen.dart';
 import '../screens/subscribe_screen.dart';
 import '../screens/bucket_screen.dart';
 

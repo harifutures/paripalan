@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import './cupertino_home_scaffold.dart';
-import '../report_request_screen.dart';
-import '../myComplaints_screen.dart';
+import '../service_request_screen.dart';
+import '../myService_requests_screen.dart';
 import '../policies_screen.dart';
 import '../more_screen.dart';
 import '../profile_screen.dart';
@@ -18,8 +18,8 @@ class _HomePageState extends State<HomePage> {
 
   Map<TabItem, WidgetBuilder> get widgetBuilders {
     return {
-      TabItem.request: (_) => ReportRequest(),
-      TabItem.myRequests: (_) => MyComplaints(),
+      TabItem.request: (_) => ServiceRequestScreen(),
+      TabItem.myRequests: (_) => MyServiceRequests(),
       TabItem.govtPolicies: (_) => GovtPolicies(),
       //TabItem.more: (_) => More(),
       TabItem.more: (_) => Profile(),
