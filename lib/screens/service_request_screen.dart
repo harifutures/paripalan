@@ -77,6 +77,8 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
 
   var _isInit = true;
 
+  var _isLoading = false;
+
   File _image;
 
   var _initValues = {
@@ -120,22 +122,46 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
     }
   }
 //TODO: Need to validate for providing either service or description for sure, and role must be chosen always..
-  void _saveForm() {
-    _showMessage();
-    Provider.of<MyRequestsProvider>(context).addServiceRequest(
-        _serviceToDisplayByPosition,
-        _roleToDisplayByPosition,
-        _serviceRequest.serviceRequestDescription,
-        "Pending");
-
-    Navigator.pop(context); //Pops the current screen.
-    //NavigationPage(tabIndex : 1);
-    Navigator.pushNamed(
-      context,
-      //NavigationHelper.routeName,
-      NavigationPage.routeName,
-     arguments: 1
-    );
+  Future<void> _saveForm() async {
+    //_showMessage();
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await Provider.of<MyRequestsProvider>(context, listen: false)
+          .addServiceRequest(
+          _serviceToDisplayByPosition,
+          _roleToDisplayByPosition,
+          _serviceRequest.serviceRequestDescription,
+          "Pending");
+      Navigator.pop(context); //Pops the current screen.
+      //NavigationPage(tabIndex : 1);
+      Navigator.pushNamed(
+          context,
+          //NavigationHelper.routeName,
+          NavigationPage.routeName,
+          arguments: 1 // 1 is the screen index .
+      );
+    } catch (error) {
+      // Using await here because, to call the finally block only after user selected 'Ok' on error popup dialog.
+        await showDialog(
+          context: context,
+          builder: (ctx) =>
+              AlertDialog(
+                title: Text('An error occurred!'),
+                content: Text('Something went wrong.'),
+                actions: <Widget>[
+                  FlatButton(child: Text('Okay'), onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },)
+                ],
+              ),
+        );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
     // final isValid = _form.currentState.validate();
     // if (!isValid) {
     //   return;
@@ -271,7 +297,11 @@ void _showMessage() {
       stateName = _userProvider.findById(1).address.getStateRastram.stateName;
     }
     
-    return Scaffold(
+    return _isLoading
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : Scaffold(
        appBar: AppBar(
          title: Text('Service Request'),
          actions: <Widget>[

@@ -55,7 +55,7 @@ class RoleProvider with ChangeNotifier {
     Role(
       roleId: 5,
       divisionId: 1,
-      roleName: 'Sarpanch',
+      roleName: 'SARPANCH',
       roleLayerId: 2
     ),
     Role(
@@ -67,19 +67,19 @@ class RoleProvider with ChangeNotifier {
     Role(
       roleId: 3,
       divisionId: 1, 
-      roleName: 'Village Voulanteer',
+      roleName: 'VOULANTEER',
       roleLayerId: 1
     ),
     Role(
       roleId: 2,
       divisionId: 1, 
-      roleName: 'Village Level2',
+      roleName: 'VOULANTEER2',
       roleLayerId: 1
     ),
     Role(
       roleId: 1,
       divisionId: 1, 
-      roleName: 'Village Level1',
+      roleName: 'VOULANTEER1',
       roleLayerId: 1
     )
 
