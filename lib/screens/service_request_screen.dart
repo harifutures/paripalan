@@ -418,10 +418,6 @@ void _showMessage() {
               SizedBox(
                 height: 12.0,
               ),
-              Row(
-                  children: <Widget>[
-
-                  ]),
               TextFormField(
                   //initialValue: _initValues['description'],
                   controller: TextEditingController(text: _serviceRequest.serviceRequestDescription),
