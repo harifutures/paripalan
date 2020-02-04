@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinning_wheel/flutter_spinning_wheel.dart';
 import 'package:paripalan/models/address.dart';
 import 'package:paripalan/models/appConstants.dart';
 import 'package:paripalan/providers/users_provider.dart';
