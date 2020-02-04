@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:paripalan/widgets/main_drawer.dart';
 import '../service_request_screen.dart';
 import '../myService_requests_screen.dart';
+import '../../widgets/myService_requests_tabs_widget.dart';
 import '../policies_screen.dart';
 import '../more_screen.dart';
 import '../profile_screen.dart';
@@ -34,8 +35,9 @@ class NavigationPageState extends State<NavigationPage> {//}with SingleTickerPro
         'title': 'Service Request',
       },
       {
-        'page': MyServiceRequests(),
-        'title': 'View Requests',
+        //'page': MyServiceRequests(),
+        'page': MyServiceRequestsTabs(),
+        'title': 'View Requests..',
       },
       {
         'page': GovtPolicies(),
@@ -86,7 +88,7 @@ class NavigationPageState extends State<NavigationPage> {//}with SingleTickerPro
     //var names = _pages1[0] as List;
     return Scaffold (
       // Hiding Appbar for 'Service Request' screen here as to customize it for 'save' button
-      appBar: _selectedIndex != 0 ? AppBar(
+      appBar: (_selectedIndex != 0 && _selectedIndex != 1 ) ? AppBar(
         title: Text(_pages[_selectedIndex]['title'])
       ) : null,
       drawer: MainDrawer(),
@@ -107,9 +109,9 @@ class NavigationPageState extends State<NavigationPage> {//}with SingleTickerPro
           BottomNavigationBarItem(
               //icon: Icon(Icons.bug_report), 
               icon: Icon(Icons.record_voice_over), 
-              title: Text('Complaint')),
+              title: Text('Request')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.filter_list), title: Text('My Complaints')),
+              icon: Icon(Icons.filter_list), title: Text('My Requests')),
           BottomNavigationBarItem(
               icon: Icon(Icons.insert_chart), title: Text('Govt Policies')),
            BottomNavigationBarItem(

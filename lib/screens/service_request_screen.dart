@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinning_wheel/flutter_spinning_wheel.dart';
 import 'package:paripalan/models/address.dart';
 import 'package:paripalan/models/appConstants.dart';
 import 'package:paripalan/providers/users_provider.dart';
@@ -12,6 +14,7 @@ import 'package:paripalan/screens/myService_requests_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker_modern/image_picker_modern.dart';
+import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 
 import '../providers/departments_provider.dart';
@@ -242,6 +245,7 @@ void _showMessage() {
               ]),
           );
   }
+
   @override
   Widget build (BuildContext context) {
     //final stateRastarmProvider = Provider.of<StatesProvider>(context);
@@ -342,10 +346,10 @@ void _showMessage() {
                         fit: BoxFit.cover,
                       )
                     ),
-                 //   child: Column (
+                    child: Column (
 
-                  //    children: <Widget> [
-                      child:  Row(
+                      children: <Widget> [
+                       Row(
                       children: <Widget>[
 
                         SingleCircularSlider(_divisionsForServices,
@@ -406,12 +410,19 @@ void _showMessage() {
                               child:Center(child:_displayRoles(_userProvider))),*/
                         )],
                     ),
+
+                    ]),
+
                 //  ]),
 
               ),
               SizedBox(
                 height: 12.0,
               ),
+              Row(
+                  children: <Widget>[
+
+                  ]),
               TextFormField(
                   //initialValue: _initValues['description'],
                   controller: TextEditingController(text: _serviceRequest.serviceRequestDescription),
@@ -602,4 +613,27 @@ void _showMessage() {
     }
   }
 
+}
+
+class BasicScore extends StatelessWidget {
+  final int selected;
+
+  final Map<int, String> labels = {
+    1: 'Purple',
+    2: 'Magenta',
+    3: 'Red',
+    4: 'Orange',
+    5: 'Yellow',
+    6: 'Blue',
+    6: 'Green',
+
+  };
+
+  BasicScore(this.selected);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('${labels[selected]}',
+        style: TextStyle(fontStyle: FontStyle.italic));
+  }
 }
