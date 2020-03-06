@@ -11,6 +11,7 @@ import './providers/myRequests_provider.dart';
 import './providers/state.dart';
 import './providers/role_provider.dart';
 import './providers/users_provider.dart';
+import './providers/services_category_provider.dart';
 import './models/district.dart';
 import './models/mandal.dart';
 import './models/village.dart';
@@ -18,6 +19,7 @@ import './models/user.dart';
 import './models/service.dart';
 import './models/serviceRequest.dart';
 import './models/role.dart';
+import './models/serviceCategory.dart';
 import './screens/myService_requests_screen.dart';
 import './screens/subscribe_screen.dart';
 import './screens/bucket_screen.dart';
@@ -27,6 +29,7 @@ import './screens/change_role_screen.dart';
 import './screens/home/navigations_screen.dart';
 import './screens/home/navigation_helper.dart';
 import './screens/home/home_page.dart';
+import './screens/services_per_category_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -83,6 +86,12 @@ class MyApp extends StatelessWidget {
           value: Service(),
         ),
         ChangeNotifierProvider.value(
+          value: ServiceCategory(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ServiceCategoryProvider(),
+        ),
+        ChangeNotifierProvider.value(
           value: ServiceRequest(),
         ),
         ChangeNotifierProvider.value(
@@ -107,6 +116,7 @@ class MyApp extends StatelessWidget {
         MyServiceRequests.routeName : (ctx) => MyServiceRequests(),
         NavigationPage.routeName : (ctx) =>  NavigationPage(),
         NavigationHelper.routeName : (ctx) =>  NavigationHelper(),
+        ServicesPerServiceCategory.routeName: (ctx) => ServicesPerServiceCategory()
 
       },
       onGenerateRoute: (RouteSettings settings) {

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paripalan/widgets/change_role_widget.dart';
-import 'package:paripalan/widgets/inhertited_division_stream_widget.dart';
+import 'package:paripalan/widgets/inherited_division_stream_widget.dart';
 import 'package:paripalan/widgets/show_superUsers_widget.dart';
 import 'package:provider/provider.dart';
 import '../models/role.dart';
@@ -10,7 +10,7 @@ import '../models/roleLayer.dart';
 import '../providers/role_provider.dart';
 import '../providers/users_provider.dart';
 import '../providers/roleLayer_provider.dart';
-import '../widgets/inhertited_changeRole_stream_widget.dart';
+import '../widgets/inherited_changeRole_stream_widget.dart';
 import '../widgets/change_role_widget.dart';
 
 class ChangeRoleForm extends StatefulWidget {

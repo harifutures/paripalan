@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:paripalan/widgets/inhertited_changeRole_stream_widget.dart';
-import 'package:paripalan/widgets/inhertited_division_stream_widget.dart';
+import 'package:paripalan/widgets/inherited_changeRole_stream_widget.dart';
+import 'package:paripalan/widgets/inherited_division_stream_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker_modern/image_picker_modern.dart';
@@ -72,7 +72,7 @@ class _ChangeRoleWidgetState extends State<ChangeRoleWidget> {
           child:displayChangeRoleUser(changeRoleUser, context),
         ),
          ChangeRoleForm(),
-        /**TODO: super users is not  still statying in userprovider scope, we need to clear it after we come out of that screen if not not using else where,
+        /**TODO: super users is still staying in userprovider scope, we need to clear it after we come out of that screen if not using else where,
          *  validate all other screen also and clear the states before leaving the screens if not using else where.*/
       ],
       );

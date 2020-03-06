@@ -3,12 +3,14 @@ import 'package:paripalan/models/role.dart';
 import 'package:paripalan/models/user.dart';
 import 'package:uuid/uuid.dart';
 import '../models/service.dart';
+import '../models/serviceCategory.dart';
 import '../models/role.dart';
 
 class ServiceRequest with ChangeNotifier {
 
   final String serviceRequestId;
   final Service service;
+  final ServiceCategory serviceCategory;
   final Role role;
   final User user;
   String serviceRequestDescription;
@@ -25,6 +27,7 @@ class ServiceRequest with ChangeNotifier {
    this.serviceRequestDescription,
    this.status,
    this.createdDate,
-   this.updatedDate
+   this.updatedDate,
+    this.serviceCategory
   });
 }

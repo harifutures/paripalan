@@ -17,5 +17,6 @@ List<User> getSuperUsers() {
 }
 @override
 bool updateShouldNotify(InheritedSuperUsers oldWidget) => superUsersData != oldWidget.superUsersData;
-static InheritedSuperUsers of(BuildContext context) =>         context.inheritFromWidgetOfExactType(InheritedSuperUsers);
+//static InheritedSuperUsers of(BuildContext context) =>         context.inheritFromWidgetOfExactType(InheritedSuperUsers);
+static InheritedSuperUsers of(BuildContext context) =>         context.dependOnInheritedWidgetOfExactType<InheritedSuperUsers>();
 }

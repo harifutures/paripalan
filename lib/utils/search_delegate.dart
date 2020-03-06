@@ -7,7 +7,7 @@ import '../widgets/change_role_widget.dart';
 import '../models/user.dart';
 import '../models/address.dart';
 import '../screens/change_role_screen.dart';
-import '../widgets/inhertited_changeRole_stream_widget.dart';
+import '../widgets/inherited_changeRole_stream_widget.dart';
 
 class CustomSearchDelegate extends SearchDelegate<String> {
 

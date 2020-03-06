@@ -8,7 +8,7 @@ import '../models/roleLayer.dart';
 import '../providers/role_provider.dart';
 import '../providers/users_provider.dart';
 import '../providers/roleLayer_provider.dart';
-import '../widgets/inhertited_changeRole_stream_widget.dart';
+import '../widgets/inherited_changeRole_stream_widget.dart';
 
 class ShowSuperUsers extends StatefulWidget {
   

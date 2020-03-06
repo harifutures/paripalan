@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paripalan/models/address.dart';
 import 'package:paripalan/models/appConstants.dart';
@@ -10,11 +11,12 @@ import 'package:paripalan/providers/users_provider.dart';
 import 'package:paripalan/screens/home/navigation_helper.dart';
 import 'package:paripalan/screens/home/navigations_screen.dart';
 import 'package:paripalan/screens/myService_requests_screen.dart';
+import 'package:paripalan/widgets/service_categories_piechart.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker_modern/image_picker_modern.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
-import 'package:flutter_circular_slider/flutter_circular_slider.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import '../providers/departments_provider.dart';
 import '../providers/states_provider.dart';
@@ -23,6 +25,7 @@ import '../providers/mandals_provider.dart';
 import '../providers/villages_provider.dart';
 import '../providers/role_provider.dart';
 import '../providers/services_provider.dart';
+import '../providers/services_category_provider.dart';
 import '../providers/myRequests_provider.dart';
 
 import '../providers/state.dart';
@@ -31,6 +34,7 @@ import '../models/mandal.dart';
 import '../models/village.dart';
 import '../models/role.dart';
 import '../models/service.dart';
+import '../models/serviceCategory.dart';
 import '../models/serviceRequest.dart';
 
 import '../widgets/districts_dropdown_widget.dart';
@@ -56,6 +60,7 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
   final _imageUrlFocusNode = FocusNode();
 
   List<Role> rolesByDivisionList;
+  List<ServiceCategory> serviceCategoriesList;
 
   Role _roleToApply;
 
@@ -82,6 +87,8 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
   var _isLoading = false;
 
   File _image;
+  List<charts.Series<ServiceCategory, String>> _serviceCategoryData = List<charts.Series<ServiceCategory, String>>();
+
 
   var _initValues = {
     'title': '',
@@ -338,7 +345,7 @@ void _showMessage() {
                 height: 12.0,
               ),
                   Container (
-                    constraints: BoxConstraints(maxHeight: 200.00),
+                    constraints: BoxConstraints(maxHeight: 370.00),
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/images/background_morning.png'),
@@ -348,18 +355,18 @@ void _showMessage() {
                     child: Column (
 
                       children: <Widget> [
-                       Row(
-                      children: <Widget>[
-
-                        SingleCircularSlider(_divisionsForServices,
+                      /* Row(
+                      children: <Widget>[*/
+                        ServiceCategoriesPie(seriesCategoriesData: _serviceCategoryData),
+                      /*  SingleCircularSlider(_divisionsForServices,
                           1,
                           height: 170.0,
                           width: 170.0,
                           primarySectors: _primarySectorsForServices,
                           //secondarySectors: 0,
-                          /*baseColor: Colors.blueGrey,
+                          *//*baseColor: Colors.blueGrey,
                           selectionColor: Colors.brown,
-                          handlerColor: Colors.purpleAccent,*/
+                          handlerColor: Colors.purpleAccent,*//*
                           baseColor: Color.fromRGBO(255, 255, 255, 0.1),
                           selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
                           handlerColor: Colors.purpleAccent,
@@ -404,11 +411,12 @@ void _showMessage() {
                                   textAlign: TextAlign.center,
                                   presetFontSizes: [20,22,25],
                                   style: TextStyle(color: Colors.white)))),
-                          /*child: Padding(
+                          *//*child: Padding(
                             padding: const EdgeInsets.symmetric(),
-                              child:Center(child:_displayRoles(_userProvider))),*/
-                        )],
-                    ),
+                              child:Center(child:_displayRoles(_userProvider))),*//*
+                        )*/
+                   //   ],
+                //    ),
 
                     ]),
 
@@ -482,6 +490,7 @@ void _showMessage() {
               SizedBox(
                 height: 20.0,
               ),
+
               new Center(
                 //padding: const EdgeInsets.only(left: 40.0, top: 20.0),
                 heightFactor: 2,
@@ -584,6 +593,24 @@ void _showMessage() {
         Provider.of<RoleProvider>(context).findRolesByDivisionId(divisionId);
     servicesByDivisionList =
         Provider.of<ServiceProvider>(context).findServicesByDivisionId(divisionId);
+    serviceCategoriesList =
+        Provider.of<ServiceCategoryProvider>(context).serviceCategoryList;
+    //bool isSelected = false;
+    if(null != _serviceCategoryData && _serviceCategoryData.length == 0 ) {
+      _serviceCategoryData.add(
+          charts.Series<ServiceCategory, String>(
+            id: 'category',
+            data: serviceCategoriesList,
+            domainFn: (ServiceCategory serviceCategory, _) => serviceCategory.serviceCategoryName,
+            //measureFn: (ServiceCategory serviceCategory, _) => serviceCategory.serviceCategoryId,
+            measureFn: (ServiceCategory serviceCategory, _) => 5,
+            labelAccessorFn: (ServiceCategory serviceCategory, _) => '${serviceCategory.serviceCategoryName}',
+            colorFn: (ServiceCategory serviceCategory, _) => serviceCategory.categoryColor
+      /*      colorFn: (ServiceCategory serviceCategory, _) =>
+            isSelected ? charts.MaterialPalette.green.shadeDefault : charts.MaterialPalette.blue.shadeDefault*/
+          )
+      );
+    }
   }
 
   _positionNumber(String positionDragged) {
@@ -610,25 +637,3 @@ void _showMessage() {
 
 }
 
-class BasicScore extends StatelessWidget {
-  final int selected;
-
-  final Map<int, String> labels = {
-    1: 'Purple',
-    2: 'Magenta',
-    3: 'Red',
-    4: 'Orange',
-    5: 'Yellow',
-    6: 'Blue',
-    6: 'Green',
-
-  };
-
-  BasicScore(this.selected);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text('${labels[selected]}',
-        style: TextStyle(fontStyle: FontStyle.italic));
-  }
-}

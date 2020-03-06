@@ -9,5 +9,6 @@ InheritedChangeRole({
 }) : super(child: child);
 @override
 bool updateShouldNotify(InheritedChangeRole oldWidget) => changeUserRoledata != oldWidget.changeUserRoledata;
-static InheritedChangeRole of(BuildContext context) =>         context.inheritFromWidgetOfExactType(InheritedChangeRole);
+//static InheritedChangeRole of(BuildContext context) =>         context.inheritFromWidgetOfExactType(InheritedChangeRole);
+static InheritedChangeRole of(BuildContext context) =>         context.dependOnInheritedWidgetOfExactType<InheritedChangeRole>();
 }
