@@ -259,47 +259,6 @@ void _showMessage() {
     _serviceRequest = Provider.of<ServiceRequest>(context);
     _handleServicesAndRoles(_userProvider);
 
-    if(null != rolesByDivisionList && rolesByDivisionList.length != 0) {
-      _divisions = rolesByDivisionList.length; // Number of Divisions in circle = Number of roles available
-      /**
-       * Sectors are showing from the start of the circle only if the sectors are even number.
-       * To show the spokes/sectors from the starting of a circle every time, just adding 1 to actual divisions in case of odd number..
-       * TODO: Below Error is popping when we click next to at starting/first sector (-1 index, index should start from 0)
-       *  -- RangeError (index): Invalid value: Not in range 0..x, inclusive: -1,
-       *
-       */
-      if(_divisions / 2 == 0) {
-        _primarySectors =_divisions;
-      } else {
-        _primarySectors =_divisions+1;
-      }
-
-      print("rolesByDivisionList Length:"+ _divisions.toString());
-    } else {
-      _divisions = 0;
-      _primarySectors = 0;
-    }
-
-    if(null != servicesByDivisionList && servicesByDivisionList.length != 0) {
-      _divisionsForServices = servicesByDivisionList.length; // Number of Divisions in circle = Number of roles available
-      /**
-       * Sectors are showing from the start of the circle only if the sectors are even number.
-       * To show the spokes/sectors from the starting of a circle every time, just adding 1 to actual divisions in case of odd number..
-       * TODO: Below Error is popping when we click next to at starting/first sector (-1 index, index should start from 0)
-       *  -- RangeError (index): Invalid value: Not in range 0..x, inclusive: -1,
-       *
-       */
-      if(_divisionsForServices / 2 == 0) {
-        _primarySectorsForServices =_divisionsForServices;
-      } else {
-        _primarySectorsForServices =_divisionsForServices+1;
-      }
-      print("servicesByDivisionList Length:"+ _divisionsForServices.toString());
-    } else {
-      _divisionsForServices = 0;
-      _primarySectorsForServices = 0;
-    }
-
     String stateName = "";
     if(null != _userProvider && null != _userProvider.findById(1)
                              && null != _userProvider.findById(1).address
@@ -348,7 +307,9 @@ void _showMessage() {
                     constraints: BoxConstraints(maxHeight: 370.00),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/background_morning.png'),
+                        //image: AssetImage('assets/images/background_morning.png'),
+                        //image: AssetImage('assets/images/background.png'),
+                        image: AssetImage('assets/images/background2.png'),
                         fit: BoxFit.cover,
                       )
                     ),
@@ -358,65 +319,6 @@ void _showMessage() {
                       /* Row(
                       children: <Widget>[*/
                         ServiceCategoriesPie(seriesCategoriesData: _serviceCategoryData),
-                      /*  SingleCircularSlider(_divisionsForServices,
-                          1,
-                          height: 170.0,
-                          width: 170.0,
-                          primarySectors: _primarySectorsForServices,
-                          //secondarySectors: 0,
-                          *//*baseColor: Colors.blueGrey,
-                          selectionColor: Colors.brown,
-                          handlerColor: Colors.purpleAccent,*//*
-                          baseColor: Color.fromRGBO(255, 255, 255, 0.1),
-                          selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
-                          handlerColor: Colors.purpleAccent,
-                          handlerOutterRadius: 12.0,
-                          //onSelectionEnd: (a, b, c) => print('onSelectionEnd $a $b $c'),
-                          //onSelectionEnd: (a, b, c) => _servicePositionNumber('$b'),
-                          onSelectionChange: (a, b, c) => _servicePositionNumber('$b'),
-                          sliderStrokeWidth: 12.0,
-                          child: Padding(
-                              padding: const EdgeInsets.symmetric(),
-                              child:Center(
-                                  child: AutoSizeText( null != _serviceToDisplayByPosition
-                                      ? _serviceToDisplayByPosition.serviceName
-                                      : "Services..",
-                                      textAlign: TextAlign.center,
-                                      presetFontSizes: [20,22,25],
-                                      style: TextStyle(color: Colors.white)))),
-                        ),
-                        SingleCircularSlider(_divisions, // divisions
-                          1, // Positions should be <= divisions
-                          height: 170.0,
-                          width: 170.0,
-                          primarySectors: _primarySectors,
-                          //secondarySectors: 24,
-                          //baseColor: Color.fromRGBO(255, 255, 255, 0.2),
-                          baseColor: Color.fromRGBO(255, 255, 255, 0.1),
-                          selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
-                          handlerColor: Colors.purpleAccent,
-                          handlerOutterRadius: 12.0,
-                          //onSelectionEnd: (a, b, c) => print('onSelectionEnd $a $b $c'),
-                          //onSelectionEnd: (a, b, c) => _positionNumber('$b'),
-                          onSelectionChange: (a, b, c) => _positionNumber('$b'),
-                          sliderStrokeWidth: 12.0,
-                          //showRoundedCapInSelection: true,
-
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(),
-                            child:Center(
-                              child: AutoSizeText(null != _roleToDisplayByPosition
-                                  ? _roleToDisplayByPosition.roleName
-                                  : "Roles..",
-                                  textAlign: TextAlign.center,
-                                  presetFontSizes: [20,22,25],
-                                  style: TextStyle(color: Colors.white)))),
-                          *//*child: Padding(
-                            padding: const EdgeInsets.symmetric(),
-                              child:Center(child:_displayRoles(_userProvider))),*//*
-                        )*/
-                   //   ],
-                //    ),
 
                     ]),
 
@@ -519,35 +421,6 @@ void _showMessage() {
 
   }
 
-  Widget _displayRoles (UserProvider userProvider) {
-    print("inside hanlde roles method..");
-    _handleServicesAndRoles(userProvider);
-    return Container(
-
-      /*decoration: BoxDecoration(
-          border: Border.all(color: Colors.blueGrey),
-          shape: BoxShape.rectangle),*/
-
-      child: new DropdownButtonHideUnderline(
-        child: DropdownButton<Role>(
-            hint: new Text("Person.."),
-            items: (null != rolesByDivisionList && rolesByDivisionList.length != 0)
-                ? rolesByDivisionList.map((Role value) {
-              return new DropdownMenuItem<Role>(
-                value: value,
-                child: new Text(value.roleName),
-              );
-            }).toList()
-                : [],
-            value: _roleToApply,
-            isDense: true,
-            onChanged: (Role newValue) {
-              setState(() => _roleToApply = newValue);
-            }),
-      ),
-    );
-  }
-
   void _handleServicesAndRoles(UserProvider userProvider) {
     String addressSwitch;
     if(null != userProvider && null != userProvider.findById(1)
@@ -589,10 +462,10 @@ void _showMessage() {
   }
 
   callPerDivision(int divisionId) {
-    rolesByDivisionList =
+    /*rolesByDivisionList =
         Provider.of<RoleProvider>(context).findRolesByDivisionId(divisionId);
     servicesByDivisionList =
-        Provider.of<ServiceProvider>(context).findServicesByDivisionId(divisionId);
+        Provider.of<ServiceProvider>(context).findServicesByDivisionId(divisionId);*/
     serviceCategoriesList =
         Provider.of<ServiceCategoryProvider>(context).serviceCategoryList;
     //bool isSelected = false;
@@ -612,28 +485,5 @@ void _showMessage() {
       );
     }
   }
-
-  _positionNumber(String positionDragged) {
-    print('position Dragged..'+positionDragged);
-    int _positionsDragged = int.parse(positionDragged);
-    if(null != rolesByDivisionList && rolesByDivisionList.length != 0) {
-      setState(() {
-        //_roleToDisplayByPosition = rolesByDivisionList[int.parse(positionDragged)-1].roleName;
-        _roleToDisplayByPosition = rolesByDivisionList[int.parse(positionDragged)-1];
-      });
-    }
-  }
-
-  _servicePositionNumber(String positionDragged) {
-    print('service position Dragged..'+positionDragged);
-    int _positionsDragged = int.parse(positionDragged);
-    if(null != servicesByDivisionList && servicesByDivisionList.length != 0) {
-      setState(() {
-        //_serviceToDisplayByPosition = servicesByDivisionList[int.parse(positionDragged)-1].serviceName;
-        _serviceToDisplayByPosition = servicesByDivisionList[int.parse(positionDragged)-1];
-      });
-    }
-  }
-
 }
 

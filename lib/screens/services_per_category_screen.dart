@@ -12,6 +12,8 @@ import '../widgets/inherited_servicesPerCategory_stream_widget.dart';
 class ServicesPerServiceCategory extends StatefulWidget {
   static const routeName = '/servicesPerCategoryScreen';
   List<charts.SeriesDatum> servicesCategoriesData;
+  List<Service> servicesPerCategoryList;
+  List<Service> servicesSelected = [];
 
   ServicesPerServiceCategory({Key key, this.servicesCategoriesData})
       : super(key: key);
@@ -24,18 +26,36 @@ class ServicesPerServiceCategory extends StatefulWidget {
 class _ServicesPerServiceCategoryState
     extends State<ServicesPerServiceCategory> {
 
-  var _isLongPress = false;
-  var _itemColor = Colors.white;
   List<charts.SeriesDatum> serviceCategory;
 
   @override
   Widget build(BuildContext context) {
-    widget.servicesCategoriesData = ModalRoute.of(context).settings.arguments;
+
+    /*TODO: We don't need to reload complete build method  (This loops through the list every time we reload which is not required)
+       every time we select an item, instead work on to load only the selected item part
+     */
+    if(null == widget.servicesCategoriesData) {
+      widget.servicesCategoriesData = ModalRoute
+          .of(context)
+          .settings
+          .arguments;
+      Provider.of<ServiceCategoryProvider>(context)
+          .setServiceCategorySelected(
+          widget.servicesCategoriesData.first.datum);
+    }
+
+    /*widget.servicesCategoriesData = ModalRoute.of(context).settings.arguments;
     Provider.of<ServiceCategoryProvider>(context)
-        .setServiceCategorySelected(widget.servicesCategoriesData.first.datum);
-    final servicesPerCategoryList = Provider.of<ServiceProvider>(context)
+        .setServiceCategorySelected(widget.servicesCategoriesData.first.datum);*/
+    if(null == widget.servicesPerCategoryList || widget.servicesPerCategoryList.length == 0) {
+      widget.servicesPerCategoryList = Provider.of<ServiceProvider>(context)
+          .findServicesByCategoryId(
+          widget.servicesCategoriesData.first.datum.serviceCategoryId);
+    }
+
+    /*final servicesPerCategoryList = Provider.of<ServiceProvider>(context)
         .findServicesByCategoryId(
-            widget.servicesCategoriesData.first.datum.serviceCategoryId);
+            widget.servicesCategoriesData.first.datum.serviceCategoryId);*/
 
     /*serviceCategory = InheritedServicesPerCategory.of(context).serviceCategoryData;
     if(null != InheritedServicesPerCategory.of(context) && null != InheritedServicesPerCategory.of(context).serviceCategoryData) {
@@ -47,24 +67,12 @@ class _ServicesPerServiceCategoryState
       appBar: new AppBar(title: Text("Servcies for Category")),
       body: Column(
         children: <Widget>[
-          //SizedBox(height: 10),
-          //Center(child:Text("\"Pull Right to Select\"", style: TextStyle(fontSize: 22, color: Colors.blueGrey),)),
-          /*Container (
-            height: 70,
-           // width: 400,
-            //constraints: BoxConstraints(maxHeight: 35.00),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/drag_to_select4.png'),
-                  //fit: BoxFit.cover,
-                )
-            )),*/
           SizedBox(height: 15),
           Expanded(
             child: ListView.builder(
-              itemCount: servicesPerCategoryList.length,
+              itemCount: widget.servicesPerCategoryList.length,
               itemBuilder: (ctx, index) =>
-              _showAllService(servicesPerCategoryList, index)
+              _showAllService(widget.servicesPerCategoryList, index)
                   //_showAllService(servicesPerCategoryList[index], index),
             ),
           )
@@ -73,9 +81,7 @@ class _ServicesPerServiceCategoryState
     );
   }
 
-  //Widget _showAllService(Service service, int index) {
   Widget _showAllService(List<Service> servicesPerCategoryList, int index) {
-
     return GestureDetector(
       onTap: () {
         if (servicesPerCategoryList.any((item) => null != item.isSelected && item.isSelected)) {
@@ -83,96 +89,83 @@ class _ServicesPerServiceCategoryState
             if(null != servicesPerCategoryList[index].isSelected) {
               servicesPerCategoryList[index].isSelected =
               !servicesPerCategoryList[index].isSelected;
+              if(null != widget.servicesSelected) {
+                //widget.servicesSelected = Provider.of<ServiceProvider>(context).getServicesSelected();
+                widget.servicesSelected.remove(servicesPerCategoryList[index]);
+              }
             } else {
               servicesPerCategoryList[index].isSelected = true;
+
+              if(null == widget.servicesSelected || 0 == widget.servicesSelected.length ||
+                  (widget.servicesSelected[0].serviceCategoryId == widget.servicesCategoriesData.first.datum.serviceCategoryId)) {
+                //widget.servicesSelected = Provider.of<ServiceProvider>(context).getServicesSelected();
+                widget.servicesSelected.add(servicesPerCategoryList[index]);
+              } else { // If current serviceCategoryId and the serviceCategoryId in servicesSelected is not matched.
+                widget.servicesSelected = null;
+                //widget.servicesSelected = Provider.of<ServiceProvider>(context).getServicesSelected();
+                widget.servicesSelected.add(servicesPerCategoryList[index]);
+              }
             }
+            Provider.of<ServiceProvider>(context).setServicesSelected(widget.servicesSelected);
           });
         }
       },
       onLongPress: () {
+        /*At any time,an user can select/submit services under only one category,
+              if the user already selected services under another category then
+              just make servicesSelected empty and add current selected services to the servicesSelected list.
+              So, servicesSelected is null/empty in 2 cases,
+              1) If the user first time selected category.
+              2) If the user was under one category before but wanted to choose a different category services now (we make the servicesSelected null and add the new selection).
+              Note: If the user selects the same category again again then the servicesSelected list data wont be lost.
+              */
+        if(null == widget.servicesSelected || 0 == widget.servicesSelected.length ||
+            (widget.servicesSelected[0].serviceCategoryId == widget.servicesCategoriesData.first.datum.serviceCategoryId)) {
+          //widget.servicesSelected = Provider.of<ServiceProvider>(context).getServicesSelected();
+          widget.servicesSelected.add(servicesPerCategoryList[index]);
+        } else { // If current serviceCategoryId and the serviceCategoryId in servicesSelected is not matched.
+          widget.servicesSelected = null;
+          widget.servicesSelected.add(servicesPerCategoryList[index]);
+        }
+
         setState(() {
           servicesPerCategoryList[index].isSelected = true;
         });
+
+        Provider.of<ServiceProvider>(context).setServicesSelected(widget.servicesSelected);
       },
+      /*TODO: onTap is responding slowly if we enable onDoubleTap, Not sure why? re enable this when find the solution for quick onTap response*/
+      /*onDoubleTap: () {
+        setState(() {
+          servicesPerCategoryList[index].isSelected = true;
+        });
+      },*/
+
       child: Card(
         //height: 100,
         elevation: 1,
-        margin: EdgeInsets.symmetric(vertical: 4),
+        //margin: EdgeInsets.symmetric(vertical: 4),
+          margin: EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 8.0),
         color: (null != servicesPerCategoryList[index].isSelected && servicesPerCategoryList[index].isSelected) ? Colors.grey[300] : Colors.white,
         child:Padding(
           padding: EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 7.0),
           child: ListTile(
-                title: Text(servicesPerCategoryList[index].serviceName,
-                    style: TextStyle(fontSize: 22, color: Colors.blueGrey),
+            leading: (null != servicesPerCategoryList[index].isSelected && servicesPerCategoryList[index].isSelected) ?
+              Padding(
+              padding: EdgeInsets.all(3),
+              child: Icon(
+                Icons.check_circle,
+                color: Colors.blue,
+                size: 30,
+              ))
+            : null,
+             title: Text(servicesPerCategoryList[index].serviceName,
+                    style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
               ),
             ),
         )
       )
     );
 
-
-
-
-      /*Container(
-      height: 100,*/
-      //Flex ( direction: Axis.horizontal,children: <Widget> [Expanded (
-          //child: Container(
-            //height: 100,
-    //          child:
-   /* Container(
-                //elevation: 2.0,
-                margin: EdgeInsets.all(5.0),
-
-
-                color: service.isSelected ? Colors.grey[300] : Colors.white,
-                //color: _colorChange(),
-                //color: _itemColor,
-                *//*margin: EdgeInsets.symmetric(
-            horizontal: 5,
-            vertical: 4,
-          ),*//*
-
-                *//*child: Column (
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget> [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 10.0),*//*
-                        child: ListTile(
-                          selected: _isLongPress,
-                          onLongPress: _toggleSelection,
-                          title: Text(service.serviceName,
-                          style: TextStyle(fontSize: 22, color: Colors.blueGrey),
-                          //    overflow: TextOverflow.ellipsis
-                          ),
-                          ),
-                          //trailing: processTrails(myRequest, index),
-                        *//*),
-                    ]),*//*
-              );*///)
-      //)]);
-  }
-
-  void _toggleSelection() {
-    setState(() {
-      if (_isLongPress) {
-        _itemColor = Colors.white;
-        _isLongPress = false;
-      } else {
-        _itemColor = Colors.grey[300];
-        _isLongPress = true;
-      }
-    });
-  }
-
-  Color _colorChange() {
-    //setState(() {
-      if (_isLongPress) {
-        _itemColor = Colors.grey[300];
-        _isLongPress = false;
-      } else {
-        _itemColor = Colors.white;
-      }
-    //});
-    return _itemColor;
   }
 }

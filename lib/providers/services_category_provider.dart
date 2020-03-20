@@ -9,32 +9,32 @@ class ServiceCategoryProvider with ChangeNotifier {
     ServiceCategory(
         serviceCategoryId: 0,
         serviceCategoryName: "Others",
-        categoryColor: charts.MaterialPalette.white
+        categoryColor: charts.MaterialPalette.gray.shade500
     ),
     ServiceCategory(
       serviceCategoryId: 1,
         serviceCategoryName: "72 HOURS \n(280 SERVCIES)",
-      categoryColor: charts.MaterialPalette.gray.shade300
+      categoryColor: charts.MaterialPalette.gray.shade400
     ),
     ServiceCategory(
         serviceCategoryId: 2,
         serviceCategoryName: "5 DAYS \n(6 SERVCIES)",
-        categoryColor: charts.MaterialPalette.white
+        categoryColor: charts.MaterialPalette.gray.shade500
     ),
     ServiceCategory(
         serviceCategoryId: 3,
         serviceCategoryName: "7 DAYS \n(98 SERVCIES)",
-        categoryColor: charts.MaterialPalette.gray.shade300
+        categoryColor: charts.MaterialPalette.gray.shade400
     ),
     ServiceCategory(
         serviceCategoryId: 4,
         serviceCategoryName: "10 DAYS \n(2 SERVCIES)",
-        categoryColor: charts.MaterialPalette.white
+        categoryColor: charts.MaterialPalette.gray.shade500
     ),
     ServiceCategory(
         serviceCategoryId: 5,
         serviceCategoryName: "30 DAYS \n(57 SERVCIES)",
-        categoryColor: charts.MaterialPalette.gray.shade300
+        categoryColor: charts.MaterialPalette.gray.shade400
     ),
 
   ];

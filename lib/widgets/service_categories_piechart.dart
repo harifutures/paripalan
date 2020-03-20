@@ -95,7 +95,9 @@ class _ServiceCategoriesPieState extends State<ServiceCategoriesPie> {
                             new charts.ArcLabelDecorator(
 
                                 labelPosition: charts.ArcLabelPosition.inside,
-                                insideLabelStyleSpec: charts.TextStyleSpec(color: charts.MaterialPalette.indigo.shadeDefault, fontSize: 13)
+                                //insideLabelStyleSpec: charts.TextStyleSpec(color: charts.MaterialPalette.indigo.shadeDefault, fontSize: 13) //For Green background
+                               // insideLabelStyleSpec: charts.TextStyleSpec(color: charts.MaterialPalette.black.lighter, fontSize: 13) // For gray back ground
+                                insideLabelStyleSpec: charts.TextStyleSpec(color: charts.MaterialPalette.indigo.shadeDefault.darker, fontSize: 13) // For blue back ground
                           )]),
 
             ))

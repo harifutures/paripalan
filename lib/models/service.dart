@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+
+import '../models/roleLayer.dart';
 import '../models/serviceCategory.dart';
 
 class Service with ChangeNotifier {
@@ -8,6 +10,7 @@ class Service with ChangeNotifier {
   // Divisions are : state, district, Mandal, Village.
   final int divisionId;
   final String serviceName;
+  final RoleLayer roleLayerForService;
   bool isSelected;
 
   Service({
@@ -15,7 +18,8 @@ class Service with ChangeNotifier {
     this.divisionId,
     this.serviceName,
     this.serviceCategoryId,
-    this.isSelected
+    this.isSelected,
+    this.roleLayerForService
   });
 
   int get getServiceId => this.serviceId;
